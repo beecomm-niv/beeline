@@ -12,7 +12,7 @@ interface Pallete {
 
 const palette: Record<'light' | 'dark', Pallete> = {
   light: {
-    palettePrimary: '#edc210',
+    palettePrimary: '#1976d2',
     textPrimary: '#000000',
     defaultBackground: '#f5f5f5',
   },
@@ -38,6 +38,55 @@ const getTheme = (mode: 'light' | 'dark') =>
 
     typography: {
       fontFamily: 'Assistant, Arial, sans-serif',
+    },
+
+    components: {
+      MuiInputLabel: {
+        styleOverrides: {
+          root: {
+            color: palette[mode].textPrimary,
+          },
+          shrink: {
+            transform: 'translate(-14px, -10px) scale(0.75) !important',
+          },
+        },
+      },
+
+      MuiOutlinedInput: {
+        styleOverrides: {
+          notchedOutline: {
+            borderColor: '#929292ff',
+          },
+          root: {
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: palette[mode].palettePrimary,
+            },
+          },
+        },
+      },
+
+      MuiFormLabel: {
+        styleOverrides: {
+          root: {
+            transformOrigin: 'top right !important',
+            right: '0 !important',
+            transform: 'translate(-14px, 16px) scale(1) !important',
+            '&.Mui-focused': {
+              transform: 'translate(-14px, -10px) scale(0.75) !important',
+            },
+          },
+        },
+      },
+
+      MuiInputBase: {
+        styleOverrides: {
+          root: {
+            '& fieldset': {
+              textAlign: 'right',
+            },
+          },
+        },
+      },
     },
   });
 
