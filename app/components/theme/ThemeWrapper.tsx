@@ -8,22 +8,30 @@ interface Pallete {
   palettePrimary: string;
   textPrimary: string;
   defaultBackground: string;
+  outlinedBackground: string;
+  shrinkColor: string;
 }
+
+const hebImplment = (lang: 'he' | 'en', classValue: string) => (lang === 'he' ? classValue : '');
 
 const palette: Record<'light' | 'dark', Pallete> = {
   light: {
     palettePrimary: '#1976d2',
     textPrimary: '#000000',
-    defaultBackground: '#f5f5f5',
+    defaultBackground: 'rgb(245, 245, 245)',
+    outlinedBackground: '#c7c7c7ff',
+    shrinkColor: '#000000',
   },
   dark: {
-    palettePrimary: '#edc210',
+    palettePrimary: '#1976d2',
     textPrimary: '#ffffff',
-    defaultBackground: '#27293d',
+    defaultBackground: '#000000',
+    outlinedBackground: '#4d4d4dff',
+    shrinkColor: '#ffffff',
   },
 };
 
-const getTheme = (mode: 'light' | 'dark') =>
+const getTheme = (mode: 'light' | 'dark', lang: 'he' | 'en') =>
   createTheme({
     palette: {
       primary: { main: palette[mode].palettePrimary },
@@ -44,10 +52,11 @@ const getTheme = (mode: 'light' | 'dark') =>
       MuiInputLabel: {
         styleOverrides: {
           root: {
-            color: palette[mode].textPrimary,
+            color: `${palette[mode].textPrimary} !important`,
           },
           shrink: {
-            transform: 'translate(-14px, -10px) scale(0.75) !important',
+            transform: hebImplment(lang, 'translate(-14px, -10px) scale(0.75) !important'),
+            color: `${palette[mode].shrinkColor} !important`,
           },
         },
       },
@@ -55,11 +64,14 @@ const getTheme = (mode: 'light' | 'dark') =>
       MuiOutlinedInput: {
         styleOverrides: {
           notchedOutline: {
-            borderColor: '#929292ff',
+            borderColor: `${palette[mode].outlinedBackground} !important`,
           },
           root: {
             '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: palette[mode].palettePrimary,
+              border: '1px solid #929292ff !important',
+            },
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              border: '1px solid #929292ff !important',
             },
           },
         },
@@ -68,11 +80,11 @@ const getTheme = (mode: 'light' | 'dark') =>
       MuiFormLabel: {
         styleOverrides: {
           root: {
-            transformOrigin: 'top right !important',
-            right: '0 !important',
-            transform: 'translate(-14px, 16px) scale(1) !important',
+            transformOrigin: hebImplment(lang, 'top right !important'),
+            right: hebImplment(lang, '0 !important'),
+            transform: hebImplment(lang, 'translate(-14px, 16px) scale(1) !important'),
             '&.Mui-focused': {
-              transform: 'translate(-14px, -10px) scale(0.75) !important',
+              transform: hebImplment(lang, 'translate(-14px, -10px) scale(0.75) !important'),
             },
           },
         },
@@ -82,7 +94,7 @@ const getTheme = (mode: 'light' | 'dark') =>
         styleOverrides: {
           root: {
             '& fieldset': {
-              textAlign: 'right',
+              textAlign: hebImplment(lang, 'right'),
             },
           },
         },
@@ -90,8 +102,8 @@ const getTheme = (mode: 'light' | 'dark') =>
     },
   });
 
-export default function ThemeWrapper({ children }: { children: React.ReactNode }) {
-  const theme = getTheme('dark');
+export default function ThemeWrapper({ children, lang }: { children: React.ReactNode; lang: 'he' | 'en' }) {
+  const theme = getTheme('dark', lang);
 
   return (
     <ThemeProvider theme={theme}>

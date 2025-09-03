@@ -5,7 +5,7 @@ import cookcieTokenMiddleware from './app/middlewares/cookie-token.middleware';
 import headerTokenMiddleware from './app/middlewares/header-token.middleware';
 
 const MiddlewareMap: { path: string[]; handler: (request: NextRequest) => Promise<NextResponse> }[] = [
-  { path: ['/'], handler: cookcieTokenMiddleware },
+  { path: ['/management'], handler: cookcieTokenMiddleware },
   { path: ['/api/users'], handler: headerTokenMiddleware },
 ];
 
