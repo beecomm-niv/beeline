@@ -1,6 +1,6 @@
-import { cookies } from 'next/headers';
-import ThemeWrapper from './components/theme/ThemeWrapper';
+import ThemeWrapper from '../components/theme/ThemeWrapper';
 import { Assistant } from 'next/font/google';
+import { Locale } from '../models/locales';
 
 const assistant = Assistant({
   subsets: ['latin', 'hebrew'],
@@ -9,16 +9,17 @@ const assistant = Assistant({
 
 export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: Locale }>;
 }>) {
-  const coo = await cookies();
-  const lang: 'he' | 'en' = (coo.get('lang')?.value as 'he' | 'en') || 'he';
+  const { locale } = await params;
 
   return (
-    <html lang={lang} dir={lang === 'he' ? 'rtl' : 'ltr'}>
+    <html lang={locale} dir={locale === 'he' ? 'rtl' : 'ltr'}>
       <body className={assistant.className}>
-        <ThemeWrapper lang={lang}>{children}</ThemeWrapper>
+        <ThemeWrapper lang={locale}>{children}</ThemeWrapper>
       </body>
     </html>
   );

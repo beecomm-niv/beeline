@@ -1,5 +1,6 @@
 'use client';
 
+import { Locale } from '@/app/models/locales';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,7 +13,7 @@ interface Pallete {
   shrinkColor: string;
 }
 
-const hebImplment = (lang: 'he' | 'en', classValue: string) => (lang === 'he' ? classValue : '');
+const hebImplment = (lang: Locale, classValue: string) => (lang === 'he' ? classValue : '');
 
 const palette: Record<'light' | 'dark', Pallete> = {
   light: {
@@ -31,7 +32,7 @@ const palette: Record<'light' | 'dark', Pallete> = {
   },
 };
 
-const getTheme = (mode: 'light' | 'dark', lang: 'he' | 'en') =>
+const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
   createTheme({
     palette: {
       primary: { main: palette[mode].palettePrimary },
@@ -102,7 +103,7 @@ const getTheme = (mode: 'light' | 'dark', lang: 'he' | 'en') =>
     },
   });
 
-export default function ThemeWrapper({ children, lang }: { children: React.ReactNode; lang: 'he' | 'en' }) {
+export default function ThemeWrapper({ children, lang }: { children: React.ReactNode; lang: Locale }) {
   const theme = getTheme('dark', lang);
 
   return (
