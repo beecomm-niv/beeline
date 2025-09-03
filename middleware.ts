@@ -1,13 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-import cookcieTokenMiddleware from './app/middlewares/cookie-token.middleware';
-import headerTokenMiddleware from './app/middlewares/header-token.middleware';
-
-const MiddlewareMap: { path: string[]; handler: (request: NextRequest) => Promise<NextResponse> }[] = [
-  { path: ['/management'], handler: cookcieTokenMiddleware },
-  { path: ['/api/users'], handler: headerTokenMiddleware },
-];
+const MiddlewareMap: { path: string[]; handler: (request: NextRequest) => Promise<NextResponse> }[] = [];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

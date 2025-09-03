@@ -2,8 +2,6 @@ import { cookies } from 'next/headers';
 import ThemeWrapper from './components/theme/ThemeWrapper';
 import { Assistant } from 'next/font/google';
 
-import api from './api/database';
-
 const assistant = Assistant({
   subsets: ['latin', 'hebrew'],
   weight: ['400', '700'],

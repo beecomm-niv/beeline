@@ -33,6 +33,10 @@ class Database {
 
     this.app = adminDatabase.getDatabase(app);
   }
+
+  public getReference(refPath: string): admin.database.Reference {
+    return this.app.ref(refPath);
+  }
 }
 
 const databse = Database.getInstance();
