@@ -9,6 +9,7 @@ const errorHandler = async <T>(handler: Handler<T>) => {
 
     return NextResponse.json(response);
   } catch (e) {
+    console.log(e);
     if (e instanceof ApiResponse) {
       return NextResponse.json(e);
     }

@@ -1,14 +1,14 @@
 export class ApiResponse<T> {
-  private hasError: boolean;
-  private value: T;
-  private statusCode: number;
-  private errorMessage: string;
+  public hasError: boolean;
+  public statusCode: number;
+  public errorMessage: string;
+  public value: T;
 
   private constructor(hasError: boolean, value: T, statusCode: number, errorMessage: string) {
     this.hasError = hasError;
-    this.value = value;
     this.statusCode = statusCode;
     this.errorMessage = errorMessage;
+    this.value = value;
   }
 
   public static success<U>(value: U, statusCode = 200): ApiResponse<U> {
@@ -25,5 +25,17 @@ export class ApiResponse<T> {
 
   public static BadUserOrPassword(): ApiResponse<null> {
     return this.failure('Bad user or password', 1000);
+  }
+
+  public static FailedToFetchUser(): ApiResponse<null> {
+    return this.failure('Faild to fetch user data', 1001);
+  }
+
+  public static InvalidBody(): ApiResponse<null> {
+    return this.failure('Invalid body', 1002);
+  }
+
+  public static UserAlradyExist(): ApiResponse<null> {
+    return this.failure('The requested email is alrady exist', 1003);
   }
 }

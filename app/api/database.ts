@@ -1,11 +1,13 @@
 import * as admin from 'firebase-admin';
 import * as adminApp from 'firebase-admin/app';
 import * as adminDatabase from 'firebase-admin/database';
+import * as adminAuth from 'firebase-admin/auth';
 
 class Database {
   private static instance: Database;
 
-  private app: admin.database.Database;
+  public app: admin.database.Database;
+  public auth: adminAuth.Auth;
 
   public static getInstance(): Database {
     if (!Database.instance) {
@@ -32,10 +34,7 @@ class Database {
     }
 
     this.app = adminDatabase.getDatabase(app);
-  }
-
-  public getReference(refPath: string): admin.database.Reference {
-    return this.app.ref(refPath);
+    this.auth = adminAuth.getAuth(app);
   }
 }
 
