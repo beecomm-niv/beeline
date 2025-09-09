@@ -13,6 +13,11 @@ const routes: Route[] = [
   },
 
   {
+    pathname: '/users/signout',
+    useAuthGuard: false,
+  },
+
+  {
     pathname: '/users',
     useAuthGuard: false,
   },

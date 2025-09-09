@@ -4,9 +4,11 @@ import { UsersUtils } from '@/app/utils/users';
 import database from '../../database';
 import { hash } from 'bcrypt';
 import { JwtUtils } from '@/app/utils/jwt';
+import { NextResponse } from 'next/server';
+import { CookieUtils } from '@/app/utils/cookies';
 
 export const POST = async (request: Request) =>
-  errorHandler<string | null>(async () => {
+  errorHandler<boolean>(async () => {
     const body: { email: string; password: string; name: string; phone: string } = await request.json();
 
     body.email = body.email?.trim().toLocaleLowerCase();
@@ -38,5 +40,13 @@ export const POST = async (request: Request) =>
 
     const token = JwtUtils.getToken({ role: 'user', userId });
 
-    return ApiResponse.success(token);
+    if (!token) {
+      throw ApiResponse.FailedToFetchUser();
+    }
+
+    const response = NextResponse.json(ApiResponse.success(true));
+
+    CookieUtils.setAuthCookie(response, token);
+
+    return response;
   });

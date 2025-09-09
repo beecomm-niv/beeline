@@ -1,12 +1,14 @@
 import { ApiResponse } from '@/app/models/api-response';
+import { CookieUtils } from '@/app/utils/cookies';
 import errorHandler from '@/app/utils/error-handler';
 import { JwtUtils } from '@/app/utils/jwt';
 import { UsersUtils } from '@/app/utils/users';
 
 import bcrypt from 'bcrypt';
+import { NextResponse } from 'next/server';
 
 export const POST = (request: Request) =>
-  errorHandler<string | null>(async () => {
+  errorHandler<boolean>(async () => {
     const body: { email: string; password: string } = await request.json();
 
     body.email = body.email?.trim().toLocaleLowerCase();
@@ -35,5 +37,9 @@ export const POST = (request: Request) =>
       throw ApiResponse.FailedToFetchUser();
     }
 
-    return ApiResponse.success(token);
+    const response = NextResponse.json(ApiResponse.success(true));
+
+    CookieUtils.setAuthCookie(response, token);
+
+    return response;
   });

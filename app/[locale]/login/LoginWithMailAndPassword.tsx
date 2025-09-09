@@ -1,5 +1,6 @@
 'use client';
 
+import { HttpUtils } from '@/app/utils/http';
 import { Box, Button, TextField } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
@@ -10,6 +11,16 @@ const LoginWithMailAndPassword = () => {
   const [password, setPassword] = React.useState('');
 
   const router = useRouter();
+
+  const onSubmit = async () => {
+    if (!email || !password) {
+      return window.alert('יש להזין שם משתמש וסיסמא');
+    }
+
+    const response = await HttpUtils.post('/users/login', { email, password });
+
+    console.log(response);
+  };
 
   return (
     <div>
@@ -28,7 +39,7 @@ const LoginWithMailAndPassword = () => {
         <TextField label='מייל' variant='outlined' fullWidth value={email} onChange={(e) => setEmail(e.target.value)} id='beeline-user' type='email' />
         <TextField label='סיסמא' variant='outlined' fullWidth value={password} onChange={(e) => setPassword(e.target.value)} id='beeline-password' type='password' />
 
-        <Button onClick={() => router.replace('management')} fullWidth variant='contained'>
+        <Button onClick={onSubmit} fullWidth variant='contained'>
           התחברות
         </Button>
       </Box>

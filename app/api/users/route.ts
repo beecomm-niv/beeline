@@ -3,10 +3,17 @@ import { UserDTO } from '@/app/models/user';
 import errorHandler from '@/app/utils/error-handler';
 import { JwtUtils } from '@/app/utils/jwt';
 import { UsersUtils } from '@/app/utils/users';
+import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
 
-export const POST = async (request: Request) =>
+export const GET = async () =>
   errorHandler<UserDTO>(async () => {
-    const { token }: { token: string } = await request.json();
+    const c = await cookies();
+    const token = c.get('sessionId')?.value || '';
+
+    if (!token) {
+      throw ApiResponse.TokenIsMissing();
+    }
 
     const jwtBody = JwtUtils.verifyToken(token);
 
@@ -22,5 +29,5 @@ export const POST = async (request: Request) =>
 
     user.password = undefined!;
 
-    return ApiResponse.success(user);
+    return NextResponse.json(ApiResponse.success(user));
   });

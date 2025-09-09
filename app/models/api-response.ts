@@ -16,7 +16,7 @@ export class ApiResponse<T> {
   }
 
   private static failure<U>(errorMessage: string, statusCode = 500): ApiResponse<U> {
-    return new ApiResponse<U>(true, null!, statusCode, errorMessage);
+    return new ApiResponse<U>(true, undefined!, statusCode, errorMessage);
   }
 
   public static UnknownError(): ApiResponse<null> {
@@ -37,5 +37,9 @@ export class ApiResponse<T> {
 
   public static UserAlradyExist(): ApiResponse<null> {
     return this.failure('The requested email is alrady exist', 1003);
+  }
+
+  public static TokenIsMissing(): ApiResponse<null> {
+    return this.failure('Token is missing', 1003);
   }
 }

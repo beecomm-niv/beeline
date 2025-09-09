@@ -1,13 +1,11 @@
 import { NextResponse } from 'next/server';
 import { ApiResponse } from '../models/api-response';
 
-type Handler<T> = () => Promise<ApiResponse<T>>;
+type Handler<T> = () => Promise<NextResponse<ApiResponse<T>>>;
 
 const errorHandler = async <T>(handler: Handler<T>) => {
   try {
-    const response = await handler();
-
-    return NextResponse.json(response);
+    return await handler();
   } catch (e) {
     console.log(e);
     if (e instanceof ApiResponse) {
