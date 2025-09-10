@@ -29,4 +29,15 @@ export class UsersUtils {
 
     return user;
   };
+
+  public static updateUser = async (data: User) => {
+    const user: Partial<User> = { ...data };
+
+    delete user.password;
+    delete user.userId;
+    delete user.email;
+    delete user.role;
+
+    await this.ref.child('/' + data.userId).update(user);
+  };
 }

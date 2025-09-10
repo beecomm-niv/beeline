@@ -5,6 +5,7 @@ export interface UserDTO {
   name: string;
   phone: string;
   role: UserRole;
+  branchId: string;
 }
 
 export interface User extends UserDTO {

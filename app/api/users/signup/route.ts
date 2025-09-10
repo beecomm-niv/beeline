@@ -34,6 +34,7 @@ export const POST = async (request: Request) =>
       password: hashPassword,
       role: 'user',
       userId,
+      branchId: '',
     });
 
     await database.auth.createUser({ email, password, uid: userId });

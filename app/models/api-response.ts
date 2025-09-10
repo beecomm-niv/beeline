@@ -19,6 +19,14 @@ export class ApiResponse<T> {
     return new ApiResponse<U>(true, undefined!, statusCode, errorMessage);
   }
 
+  public static Unauthorized(): ApiResponse<null> {
+    return ApiResponse.failure('Unauthorized !', 403);
+  }
+
+  public static NotFound(): ApiResponse<null> {
+    return ApiResponse.failure('Not Found', 404);
+  }
+
   public static UnknownError(): ApiResponse<null> {
     return ApiResponse.failure('Unknown error', 500);
   }
