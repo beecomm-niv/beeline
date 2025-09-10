@@ -1,11 +1,11 @@
 'use client';
 
-import { InitStore, Store } from '@/app/models/store';
+import { InitManagementStore, ManagementStore } from '@/app/models/management-store';
 import { createContext, useContext, useRef } from 'react';
 import { createStore, StoreApi, useStore } from 'zustand';
 
-const createManagementStore = (initStore: InitStore) =>
-  createStore<Store>((set) => ({
+const createManagementStore = (initStore: InitManagementStore) =>
+  createStore<ManagementStore>((set) => ({
     branch: initStore.branch,
     setBranch: (branch) => set({ branch }),
 
@@ -15,20 +15,20 @@ const createManagementStore = (initStore: InitStore) =>
     lang: initStore.lang,
   }));
 
-const ManagementContext = createContext<StoreApi<Store>>(undefined!);
+const ManagementContext = createContext<StoreApi<ManagementStore>>(undefined!);
 
-export function useAppStore<T>(selector: (s: Store) => T): T {
+export function useAppStore<T>(selector: (s: ManagementStore) => T): T {
   const store = useContext(ManagementContext);
 
   return useStore(store, selector);
 }
 
-interface Props extends InitStore {
+interface Props extends InitManagementStore {
   children: React.ReactNode;
 }
 
 export const ManagementProvider = (props: Props) => {
-  const ref = useRef<StoreApi<Store>>(createManagementStore({ branch: props.branch, user: props.user, lang: props.lang }));
+  const ref = useRef<StoreApi<ManagementStore>>(createManagementStore({ branch: props.branch, user: props.user, lang: props.lang }));
 
   return <ManagementContext.Provider value={ref.current}>{props.children}</ManagementContext.Provider>;
 };
