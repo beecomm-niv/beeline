@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 
 import { BranchUtils } from '@/app/utils/branch';
 import { Branch } from '@/app/models/branch';
+import { AppstoreProvider } from '@/app/components/store/appstore-provider';
 
 export default async function ManagementLayout({ children }: { children: React.ReactNode }) {
   const header = await headers();
@@ -21,7 +22,9 @@ export default async function ManagementLayout({ children }: { children: React.R
 
   return (
     <div>
-      {user.email}, {branch?.name}
+      <AppstoreProvider user={user} branch={branch!}>
+        {children}
+      </AppstoreProvider>
     </div>
   );
 }

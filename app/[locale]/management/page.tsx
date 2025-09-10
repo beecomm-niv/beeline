@@ -1,5 +1,7 @@
+import ReservationList from '@/app/components/reservations-list';
+
 const ManagementPage = () => {
-  return <div>MenegmantPage</div>;
+  return <ReservationList />;
 };
 
 export default ManagementPage;
