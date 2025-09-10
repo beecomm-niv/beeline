@@ -25,11 +25,11 @@ export default async function ManagementLayout({ children, params }: { children:
   }
 
   return (
-    <ManagementProvider user={user} branch={branch!} lang={locale}>
-      <div>
+    <div>
+      <ManagementProvider user={user} branch={branch!} lang={locale}>
         <Drawer />
         {children}
-      </div>
-    </ManagementProvider>
+      </ManagementProvider>
+    </div>
   );
 }
