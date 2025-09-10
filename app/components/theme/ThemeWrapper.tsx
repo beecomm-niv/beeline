@@ -11,24 +11,30 @@ interface Pallete {
   defaultBackground: string;
   outlinedBackground: string;
   shrinkColor: string;
+  papper: string;
+  divider: string;
 }
 
 const hebImplment = (lang: Locale, classValue: string) => (lang === 'he' ? classValue : '');
 
 const palette: Record<'light' | 'dark', Pallete> = {
-  light: {
-    palettePrimary: '#1976d2',
-    textPrimary: '#000000',
-    defaultBackground: 'rgb(245, 245, 245)',
-    outlinedBackground: '#c7c7c7ff',
-    shrinkColor: '#000000',
-  },
   dark: {
     palettePrimary: '#1976d2',
     textPrimary: '#ffffff',
     defaultBackground: '#000000',
     outlinedBackground: '#4d4d4dff',
     shrinkColor: '#ffffff',
+    papper: '#212121',
+    divider: '#bababa',
+  },
+  light: {
+    palettePrimary: '#1976d2',
+    textPrimary: '#000000',
+    defaultBackground: 'rgb(245, 245, 245)',
+    outlinedBackground: '#c7c7c7ff',
+    shrinkColor: '#000000',
+    papper: '#d4d4d4',
+    divider: 'red',
   },
 };
 
@@ -97,6 +103,39 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
             '& fieldset': {
               textAlign: hebImplment(lang, 'right'),
             },
+          },
+        },
+      },
+
+      MuiSvgIcon: {
+        styleOverrides: {
+          root: {
+            color: palette[mode].textPrimary,
+          },
+        },
+      },
+
+      MuiDrawer: {
+        styleOverrides: {
+          paper: {
+            width: '15%',
+            backgroundColor: palette[mode].papper,
+          },
+        },
+      },
+
+      MuiIconButton: {
+        styleOverrides: {
+          root: {
+            padding: 0,
+          },
+        },
+      },
+
+      MuiDivider: {
+        styleOverrides: {
+          root: {
+            border: '1px solid ' + palette[mode].divider,
           },
         },
       },

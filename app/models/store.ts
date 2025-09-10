@@ -1,15 +1,14 @@
 import { Branch } from './branch';
+import { Locale } from './locales';
 import { UserDTO } from './user';
 
 export interface InitStore {
   user: UserDTO;
   branch: Branch;
+  lang: Locale;
 }
 
-export interface Store {
-  user: UserDTO;
+export interface Store extends InitStore {
   setUser: (user: UserDTO) => void;
-
-  branch: Branch;
   setBranch: (branch: Branch) => void;
 }

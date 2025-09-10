@@ -1,4 +1,4 @@
-import LoginWithMailAndPassword from './LoginWithMailAndPassword';
+import LoginWithMailAndPassword from '@/app/components/login';
 
 const LoginPage = async () => {
   return <LoginWithMailAndPassword />;

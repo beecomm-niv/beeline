@@ -11,6 +11,8 @@ const createAppStore = (initStore: InitStore) =>
 
     user: initStore.user,
     setUser: (user) => set({ user }),
+
+    lang: initStore.lang,
   }));
 
 export const AppStoreContext = createContext<StoreApi<Store>>(undefined!);
@@ -20,7 +22,7 @@ interface Props extends InitStore {
 }
 
 export const AppstoreProvider = (props: Props) => {
-  const ref = useRef<StoreApi<Store>>(createAppStore({ branch: props.branch, user: props.user }));
+  const ref = useRef<StoreApi<Store>>(createAppStore({ branch: props.branch, user: props.user, lang: props.lang }));
 
   return <AppStoreContext.Provider value={ref.current}>{props.children}</AppStoreContext.Provider>;
 };
