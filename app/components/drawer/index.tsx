@@ -1,11 +1,11 @@
 'use client';
 
-import { useAppStore } from '@/app/hooks/useAppStore';
 import { Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, Drawer as MuiDrawer, styled, Typography } from '@mui/material';
 import { ReactElement, useState } from 'react';
 
 import SettingsIcon from '@mui/icons-material/Settings';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useAppStore } from '@/app/store/management-provider';
 
 interface RouteItem {
   path: string;

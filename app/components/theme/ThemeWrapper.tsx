@@ -12,7 +12,6 @@ interface Pallete {
   outlinedBackground: string;
   shrinkColor: string;
   papper: string;
-  divider: string;
 }
 
 const hebImplment = (lang: Locale, classValue: string) => (lang === 'he' ? classValue : '');
@@ -25,7 +24,6 @@ const palette: Record<'light' | 'dark', Pallete> = {
     outlinedBackground: '#4d4d4dff',
     shrinkColor: '#ffffff',
     papper: '#212121',
-    divider: '#bababa',
   },
   light: {
     palettePrimary: '#1976d2',
@@ -34,7 +32,6 @@ const palette: Record<'light' | 'dark', Pallete> = {
     outlinedBackground: '#c7c7c7ff',
     shrinkColor: '#000000',
     papper: '#d4d4d4',
-    divider: 'red',
   },
 };
 
@@ -135,7 +132,7 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
       MuiDivider: {
         styleOverrides: {
           root: {
-            border: '1px solid ' + palette[mode].divider,
+            border: '1px solid ' + palette[mode].papper,
           },
         },
       },
