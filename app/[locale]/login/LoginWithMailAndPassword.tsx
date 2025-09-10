@@ -1,5 +1,6 @@
 'use client';
 
+import { FirebaseClientUtils } from '@/app/utils/firebase-client';
 import { HttpUtils } from '@/app/utils/http';
 import { Box, Button, TextField } from '@mui/material';
 import { useRouter } from 'next/navigation';
@@ -22,6 +23,7 @@ const LoginWithMailAndPassword = () => {
       return window.alert('שם משתמש או סיסמא שגויים');
     }
 
+    await FirebaseClientUtils.signIn(email, password);
     router.replace('/management');
   };
 

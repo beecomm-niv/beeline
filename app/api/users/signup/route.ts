@@ -37,6 +37,7 @@ export const POST = async (request: Request) =>
     });
 
     await database.auth.createUser({ email, password, uid: userId });
+    await database.auth.setCustomUserClaims(userId, { uid: userId, role: 'user' });
 
     const token = await JwtUtils.getToken({ role: 'user', userId });
 

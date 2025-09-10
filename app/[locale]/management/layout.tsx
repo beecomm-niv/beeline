@@ -2,6 +2,8 @@ import { UsersUtils } from '@/app/utils/users';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+import '../../utils/firebase-client';
+
 export default async function ManagementLayout({ children }: { children: React.ReactNode }) {
   const header = await headers();
   const userId = header.get('x-authenticated-user');
