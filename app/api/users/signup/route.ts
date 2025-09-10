@@ -38,7 +38,7 @@ export const POST = async (request: Request) =>
 
     await database.auth.createUser({ email, password, uid: userId });
 
-    const token = JwtUtils.getToken({ role: 'user', userId });
+    const token = await JwtUtils.getToken({ role: 'user', userId });
 
     if (!token) {
       throw ApiResponse.FailedToFetchUser();

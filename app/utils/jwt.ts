@@ -1,31 +1,34 @@
-import { sign, verify } from 'jsonwebtoken';
 import { JwtBody } from '../models/jwt-body';
+import { jwtVerify, SignJWT } from 'jose';
 
 export class JwtUtils {
   private static secret: string = process.env.JWT_SECRET || '';
 
-  public static getToken = (body: JwtBody): string | null => {
+  public static getToken = async (body: JwtBody): Promise<string | null> => {
     try {
-      if (!this.secret) {
-        return null;
-      }
+      const encoder = new TextEncoder();
+      const secretKey = encoder.encode(this.secret);
 
-      return sign(body, this.secret);
+      const token = await new SignJWT(body as any)
+        .setProtectedHeader({ alg: 'HS256' }) // האלגוריתם
+        .setIssuedAt()
+        .setExpirationTime('2h') // תוקף (לדוגמה שעתיים)
+        .sign(secretKey);
+
+      return token;
     } catch {
       return null;
     }
   };
 
-  public static verifyToken = (token: string): JwtBody | null => {
+  public static verifyToken = async (token: string): Promise<JwtBody | null> => {
     try {
-      if (!this.secret) {
-        return null;
-      }
+      const encoder = new TextEncoder();
+      const secretKey = encoder.encode(this.secret);
 
-      const body = verify(token, this.secret);
-
-      return body as JwtBody;
-    } catch {
+      const { payload } = await jwtVerify(token, secretKey);
+      return payload as any as JwtBody;
+    } catch (e) {
       return null;
     }
   };

@@ -17,9 +17,12 @@ const LoginWithMailAndPassword = () => {
       return window.alert('יש להזין שם משתמש וסיסמא');
     }
 
-    const response = await HttpUtils.post('/users/login', { email, password });
+    const response = await HttpUtils.post<boolean>('/users/login', { email, password });
+    if (response.hasError) {
+      return window.alert('שם משתמש או סיסמא שגויים');
+    }
 
-    console.log(response);
+    router.replace('/management');
   };
 
   return (

@@ -31,7 +31,7 @@ export const POST = (request: Request) =>
       throw ApiResponse.BadUserOrPassword();
     }
 
-    const token = JwtUtils.getToken({ role: user.role, userId });
+    const token = await JwtUtils.getToken({ role: user.role, userId });
 
     if (!token) {
       throw ApiResponse.FailedToFetchUser();

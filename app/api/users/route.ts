@@ -15,19 +15,17 @@ export const GET = async () =>
       throw ApiResponse.TokenIsMissing();
     }
 
-    const jwtBody = JwtUtils.verifyToken(token);
+    const jwtBody = await JwtUtils.verifyToken(token);
 
     if (!jwtBody) {
       throw ApiResponse.FailedToFetchUser();
     }
 
-    const user = await UsersUtils.getUserByUid(jwtBody.userId);
+    const user = await UsersUtils.getUserDtoById(jwtBody.userId);
 
     if (!user) {
       throw ApiResponse.FailedToFetchUser();
     }
-
-    user.password = undefined!;
 
     return NextResponse.json(ApiResponse.success(user));
   });
