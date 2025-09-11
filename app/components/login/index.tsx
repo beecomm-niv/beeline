@@ -1,5 +1,6 @@
 'use client';
 
+import { useAppStore } from '@/app/store/appStore-provider';
 import { FirebaseClientUtils } from '@/app/utils/firebase-client';
 import { HttpUtils } from '@/app/utils/http';
 import { Box, Button, TextField } from '@mui/material';
@@ -12,15 +13,16 @@ const LoginWithMailAndPassword = () => {
   const [password, setPassword] = React.useState('');
 
   const router = useRouter();
+  const translate = useAppStore((s) => s.translate);
 
   const onSubmit = async () => {
     if (!email || !password) {
-      return window.alert('יש להזין שם משתמש וסיסמא');
+      return window.alert('Email and Password are required !');
     }
 
     const response = await HttpUtils.post<boolean>('/users/login', { email, password });
     if (response.hasError) {
-      return window.alert('שם משתמש או סיסמא שגויים');
+      return window.alert('Email or Password are not associated with any user');
     }
 
     await FirebaseClientUtils.signIn(email, password);
@@ -41,11 +43,11 @@ const LoginWithMailAndPassword = () => {
           margin: '0 auto',
         }}
       >
-        <TextField label='מייל' variant='outlined' fullWidth value={email} onChange={(e) => setEmail(e.target.value)} id='beeline-user' type='email' />
-        <TextField label='סיסמא' variant='outlined' fullWidth value={password} onChange={(e) => setPassword(e.target.value)} id='beeline-password' type='password' />
+        <TextField label={translate.loginEmailLabel} variant='outlined' fullWidth value={email} onChange={(e) => setEmail(e.target.value)} id='beeline-user' type='email' />
+        <TextField label={translate.loginPasswordLabel} variant='outlined' fullWidth value={password} onChange={(e) => setPassword(e.target.value)} id='beeline-password' type='password' />
 
         <Button onClick={onSubmit} fullWidth variant='contained'>
-          התחברות
+          {translate.loginSubmitButton}
         </Button>
       </Box>
     </div>

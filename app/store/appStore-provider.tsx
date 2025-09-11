@@ -3,10 +3,12 @@
 import { createStore, StoreApi, useStore } from 'zustand';
 import { AppStore, AppStoreInit } from '../models/app-store';
 import { createContext, useContext, useRef } from 'react';
+import { translate } from '../utils/translate';
 
 const createAppStore = (init: AppStoreInit) =>
   createStore<AppStore>((set) => ({
     lang: init.lang,
+    translate: translate[init.lang],
     mode: 'dark',
     setMode: (mode) => set({ mode }),
   }));

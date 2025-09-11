@@ -6,23 +6,25 @@ import { ReactElement, useState } from 'react';
 import SettingsIcon from '@mui/icons-material/Settings';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAppStore } from '@/app/store/appStore-provider';
+import { Translate } from '@/app/utils/translate';
 
 interface RouteItem {
   path: string;
   icon: ReactElement<any, any>;
-  title: string;
+  title: keyof Translate;
 }
 
 const routes: RouteItem[] = [
   {
     path: 'settings',
     icon: <SettingsIcon />,
-    title: 'הגדרות',
+    title: 'drawerSettingsLabel',
   },
 ];
 
 const Drawer = () => {
   const lang = useAppStore((s) => s.lang);
+  const translate = useAppStore((s) => s.translate);
 
   const [open, setOpen] = useState(false);
 
@@ -43,7 +45,7 @@ const Drawer = () => {
             <ListItem key={r.path}>
               <ListItemButton>
                 <ListItemIcon>{r.icon}</ListItemIcon>
-                <Typography variant='h6'>{r.title}</Typography>
+                <Typography variant='h6'>{translate[r.title]}</Typography>
               </ListItemButton>
             </ListItem>
           ))}
