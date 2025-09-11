@@ -12,7 +12,7 @@ export class JwtUtils {
       const token = await new SignJWT(body as any)
         .setProtectedHeader({ alg: 'HS256' }) // האלגוריתם
         .setIssuedAt()
-        .setExpirationTime('2h') // תוקף (לדוגמה שעתיים)
+        .setExpirationTime('4w') // תוקף (לדוגמה שעתיים)
         .sign(secretKey);
 
       return token;

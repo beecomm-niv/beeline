@@ -10,6 +10,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 import { useAppStore } from '@/app/store/appStore-provider';
 import { Translate } from '@/app/utils/translate';
+import { useRouter } from 'next/navigation';
 
 interface RouteItem {
   path: string;
@@ -19,7 +20,7 @@ interface RouteItem {
 
 const routes: RouteItem[] = [
   {
-    path: 'settings',
+    path: 'management/settings',
     icon: <SettingsIcon />,
     title: 'drawerSettingsLabel',
   },
@@ -32,6 +33,12 @@ const Drawer = () => {
   const setMode = useAppStore((s) => s.setMode);
 
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+
+  const onRoute = (path: string) => {
+    router.push('/' + path);
+    setOpen(false);
+  };
 
   return (
     <>
@@ -51,7 +58,7 @@ const Drawer = () => {
         <List>
           {routes.map((r) => (
             <ListItem key={r.path}>
-              <ListItemButton>
+              <ListItemButton onClick={() => onRoute(r.path)}>
                 <ListItemIcon>{r.icon}</ListItemIcon>
                 <Typography variant='h6'>{translate[r.title]}</Typography>
               </ListItemButton>

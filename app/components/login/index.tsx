@@ -15,6 +15,7 @@ const LoginWithMailAndPassword = () => {
 
   const router = useRouter();
   const translate = useAppStore((s) => s.translate);
+  const lang = useAppStore((s) => s.lang);
 
   const onSubmit = async () => {
     if (!email || !password) {
@@ -27,7 +28,7 @@ const LoginWithMailAndPassword = () => {
     }
 
     await signInWithEmailAndPassword(AUTH, email, password);
-    router.replace('/management');
+    router.replace(`/${lang}/management`);
   };
 
   useEffect(() => {

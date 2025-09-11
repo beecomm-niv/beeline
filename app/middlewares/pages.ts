@@ -19,6 +19,11 @@ const routes: Route[] = [
     pathname: '/management',
     useAuthGuard: true,
   },
+
+  {
+    pathname: '/management/settings',
+    useAuthGuard: true,
+  },
 ];
 
 const pagesMiddleware = (request: NextRequest) => {
@@ -28,7 +33,7 @@ const pagesMiddleware = (request: NextRequest) => {
 
   if (locale) {
     const path = pathname.replace(`/${locale}`, '');
-    return pageHandler(request, path);
+    return pageHandler(request, path, locale);
   }
 
   const url = request.nextUrl.clone();
@@ -37,7 +42,7 @@ const pagesMiddleware = (request: NextRequest) => {
   return NextResponse.redirect(url);
 };
 
-const pageHandler = async (request: Request, path: string) => {
+const pageHandler = async (request: Request, path: string, locale: string) => {
   const handler = routes.find((r) => r.pathname === path);
   if (!handler) {
     return new NextResponse('Not Found', { status: 404 });
@@ -55,25 +60,21 @@ const pageHandler = async (request: Request, path: string) => {
   }
 
   if (handler.useAuthGuard) {
-    return await authGuardHandler(request, body);
+    if (!body) {
+      return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
+    }
+
+    const response = NextResponse.next();
+    response.headers.append('x-authenticated-user', body.userId);
+
+    return response;
   }
 
   if (body) {
-    return NextResponse.redirect(new URL('/management', request.url));
+    return NextResponse.redirect(new URL(`/${locale}/management`, request.url));
   }
 
   return NextResponse.next();
-};
-
-const authGuardHandler = async (request: Request, body: JwtBody | null) => {
-  if (!body) {
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
-
-  const response = NextResponse.next();
-  response.headers.append('x-authenticated-user', body.userId);
-
-  return response;
 };
 
 export default pagesMiddleware;

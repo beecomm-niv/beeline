@@ -148,7 +148,7 @@ export default function ThemeWrapper({ children, lang }: { children: React.React
   const muiTheme = getTheme(mode, lang);
 
   useEffect(() => {
-    let mode = localStorage.getItem('theme') || 'light';
+    let mode = localStorage.getItem('theme') || 'dark';
 
     if (mode !== 'light' && mode !== 'dark') {
       mode = 'dark';

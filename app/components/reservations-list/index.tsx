@@ -1,7 +1,7 @@
 'use client';
 
 const ReservationList = () => {
-  return <div>hello</div>;
+  return <div>ManagementPage</div>;
 };
 
 export default ReservationList;
