@@ -5,7 +5,7 @@ import { ReactElement, useState } from 'react';
 
 import SettingsIcon from '@mui/icons-material/Settings';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useAppStore } from '@/app/store/management-provider';
+import { useAppStore } from '@/app/store/appStore-provider';
 
 interface RouteItem {
   path: string;

@@ -6,11 +6,8 @@ import { BranchUtils } from '@/app/utils/branch';
 import { Branch } from '@/app/models/branch';
 import { ManagementProvider } from '@/app/store/management-provider';
 import Drawer from '@/app/components/drawer';
-import { Locale } from '@/app/models/locales';
 
-export default async function ManagementLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: Locale }> }) {
-  const { locale } = await params;
-
+export default async function ManagementLayout({ children }: { children: React.ReactNode }) {
   const header = await headers();
   const userId = header.get('x-authenticated-user');
   const user = await UsersUtils.getUserDtoById(userId || '');
@@ -26,7 +23,7 @@ export default async function ManagementLayout({ children, params }: { children:
 
   return (
     <div>
-      <ManagementProvider user={user} branch={branch!} lang={locale}>
+      <ManagementProvider user={user} branch={branch!}>
         <Drawer />
         {children}
       </ManagementProvider>

@@ -1,10 +1,11 @@
 'use client';
 
 import { Locale } from '@/app/models/locales';
+import { useAppStore } from '@/app/store/appStore-provider';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 interface Pallete {
   palettePrimary: string;
@@ -141,13 +142,20 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
   });
 
 export default function ThemeWrapper({ children, lang }: { children: React.ReactNode; lang: Locale }) {
-  const [theme, setTheme] = useState<any>('dark');
-  const muiTheme = getTheme(theme, lang);
+  const mode = useAppStore((s) => s.mode);
+  const setMode = useAppStore((s) => s.setMode);
+
+  const muiTheme = getTheme(mode, lang);
 
   useEffect(() => {
-    const v = localStorage.getItem('theme') || 'light';
-    setTheme(v);
-  }, []);
+    let mode = localStorage.getItem('theme') || 'light';
+
+    if (mode !== 'light' && mode !== 'dark') {
+      mode = 'dark';
+    }
+
+    setMode(mode as any);
+  }, [setMode]);
 
   return (
     <ThemeProvider theme={muiTheme}>

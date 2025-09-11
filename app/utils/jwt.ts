@@ -28,7 +28,7 @@ export class JwtUtils {
 
       const { payload } = await jwtVerify(token, secretKey);
       return payload as any as JwtBody;
-    } catch (e) {
+    } catch {
       return null;
     }
   };

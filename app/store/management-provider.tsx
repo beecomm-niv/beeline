@@ -11,13 +11,11 @@ const createManagementStore = (initStore: InitManagementStore) =>
 
     user: initStore.user,
     setUser: (user) => set({ user }),
-
-    lang: initStore.lang,
   }));
 
 const ManagementContext = createContext<StoreApi<ManagementStore>>(undefined!);
 
-export function useAppStore<T>(selector: (s: ManagementStore) => T): T {
+export function useManagementStore<T>(selector: (s: ManagementStore) => T): T {
   const store = useContext(ManagementContext);
 
   return useStore(store, selector);
@@ -28,7 +26,7 @@ interface Props extends InitManagementStore {
 }
 
 export const ManagementProvider = (props: Props) => {
-  const ref = useRef<StoreApi<ManagementStore>>(createManagementStore({ branch: props.branch, user: props.user, lang: props.lang }));
+  const ref = useRef<StoreApi<ManagementStore>>(createManagementStore({ branch: props.branch, user: props.user }));
 
   return <ManagementContext.Provider value={ref.current}>{props.children}</ManagementContext.Provider>;
 };
