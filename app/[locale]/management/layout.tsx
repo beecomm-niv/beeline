@@ -6,6 +6,7 @@ import { BranchUtils } from '@/app/utils/branch';
 import { Branch } from '@/app/models/branch';
 import { ManagementProvider } from '@/app/store/management-provider';
 import Drawer from '@/app/components/drawer';
+import NoBranch from '@/app/components/no-branch';
 
 export default async function ManagementLayout({ children }: { children: React.ReactNode }) {
   const header = await headers();
@@ -13,7 +14,7 @@ export default async function ManagementLayout({ children }: { children: React.R
   const user = await UsersUtils.getUserDtoById(userId || '');
 
   if (!user) {
-    redirect('/login');
+    return redirect('/login');
   }
 
   let branch: Branch | null = null;
@@ -21,9 +22,13 @@ export default async function ManagementLayout({ children }: { children: React.R
     branch = await BranchUtils.getBranchById(user.branchId);
   }
 
+  if (!branch) {
+    return <NoBranch />;
+  }
+
   return (
     <div>
-      <ManagementProvider user={user} branch={branch!}>
+      <ManagementProvider user={user} branch={branch}>
         <Drawer />
         {children}
       </ManagementProvider>

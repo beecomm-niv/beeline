@@ -3,6 +3,7 @@ import { Route } from '../models/route';
 import { UserRole } from '../models/user';
 import { JwtUtils } from '../utils/jwt';
 import { ApiResponse } from '../models/api-response';
+import { JwtBody } from '../models/jwt-body';
 
 const RoleLevel: Record<UserRole, number> = {
   super_admin: 3,
@@ -42,6 +43,12 @@ const routes: Route[] = [
     useAuthGuard: true,
     role: 'admin',
   },
+
+  {
+    pathname: '/branches/update',
+    useAuthGuard: true,
+    role: 'user',
+  },
 ];
 
 const apiMiddleware = async (request: NextRequest, route: string) => {
@@ -52,6 +59,8 @@ const apiMiddleware = async (request: NextRequest, route: string) => {
       throw ApiResponse.NotFound();
     }
 
+    let body: JwtBody | null = null;
+
     if (handler.useAuthGuard && handler.role) {
       const token = request.cookies.get('sessionId')?.value;
 
@@ -59,13 +68,19 @@ const apiMiddleware = async (request: NextRequest, route: string) => {
         throw ApiResponse.Unauthorized();
       }
 
-      const body = await JwtUtils.verifyToken(token);
+      body = await JwtUtils.verifyToken(token);
       if (!body?.role || RoleLevel[body.role] < RoleLevel[handler.role]) {
         throw ApiResponse.Unauthorized();
       }
     }
 
-    return NextResponse.next();
+    const response = NextResponse.next();
+
+    if (body) {
+      response.headers.append('x-authenticated-user', body.userId);
+    }
+
+    return response;
   } catch (e) {
     if (e instanceof ApiResponse) {
       return NextResponse.json(e, { status: e.statusCode });

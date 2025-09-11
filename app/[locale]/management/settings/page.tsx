@@ -1,9 +1,7 @@
-interface Props {
-  children: React.ReactNode;
-}
+import Settings from '@/app/components/settings';
 
-const SettingsPage = (props: Props) => {
-  return <div>SettingsPage{props.children}</div>;
+const SettingsPage = () => {
+  return <Settings />;
 };
 
 export default SettingsPage;

@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
 
-export default async function Home() {
+export default function Home() {
   return notFound();
 }

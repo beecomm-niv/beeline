@@ -1,6 +1,6 @@
 import LoginWithMailAndPassword from '@/app/components/login';
 
-const LoginPage = async () => {
+const LoginPage = () => {
   return <LoginWithMailAndPassword />;
 };
 

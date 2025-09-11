@@ -9,11 +9,13 @@ import { useEffect } from 'react';
 
 interface Pallete {
   palettePrimary: string;
+  palleteSecondery: string;
   textPrimary: string;
   defaultBackground: string;
   outlinedBackground: string;
   shrinkColor: string;
   papper: string;
+  textSecondery: string;
 }
 
 const hebImplment = (lang: Locale, classValue: string) => (lang === 'he' ? classValue : '');
@@ -22,10 +24,12 @@ const palette: Record<'light' | 'dark', Pallete> = {
   dark: {
     palettePrimary: '#1976d2',
     textPrimary: '#ffffff',
+    textSecondery: 'gray',
     defaultBackground: '#000000',
-    outlinedBackground: '#4d4d4dff',
+    outlinedBackground: '#bbbbbbff',
     shrinkColor: '#ffffff',
     papper: '#212121',
+    palleteSecondery: '#edc210',
   },
   light: {
     palettePrimary: '#1976d2',
@@ -34,6 +38,8 @@ const palette: Record<'light' | 'dark', Pallete> = {
     outlinedBackground: '#c7c7c7ff',
     shrinkColor: '#000000',
     papper: '#d4d4d4',
+    palleteSecondery: '#edc210',
+    textSecondery: 'gray',
   },
 };
 
@@ -47,11 +53,15 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
 
       text: {
         primary: palette[mode].textPrimary,
+        secondary: palette[mode].textSecondery,
       },
+
+      mode,
     },
 
     typography: {
       fontFamily: 'Assistant, Arial, sans-serif',
+      fontSize: 16,
     },
 
     components: {
@@ -135,6 +145,48 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
         styleOverrides: {
           root: {
             border: '1px solid ' + palette[mode].papper,
+          },
+        },
+      },
+
+      MuiTabs: {
+        styleOverrides: {
+          indicator: {
+            backgroundColor: palette[mode].palleteSecondery,
+          },
+        },
+      },
+
+      MuiSwitch: {
+        styleOverrides: {
+          track: {
+            backgroundColor: palette[mode].textPrimary,
+          },
+        },
+      },
+
+      MuiFilledInput: {
+        styleOverrides: {
+          root: {
+            backgroundColor: palette[mode].papper,
+            '&.Mui-focused': {
+              backgroundColor: `${palette[mode].papper} !important`,
+            },
+            '&:hover': {
+              backgroundColor: `${palette[mode].papper} !important`,
+            },
+          },
+        },
+      },
+
+      MuiTab: {
+        styleOverrides: {
+          root: {
+            fontSize: 18,
+            color: palette[mode].textPrimary,
+            '&.Mui-selected': {
+              color: palette[mode].palleteSecondery,
+            },
           },
         },
       },

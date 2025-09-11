@@ -14,4 +14,14 @@ export class BranchUtils {
 
     return data.val() || null;
   };
+
+  public static updateBranch = async (branch: Partial<Branch>) => {
+    if (branch.id) {
+      const id = branch.id;
+
+      delete branch.id;
+
+      await this.ref.child('/' + id).update(branch);
+    }
+  };
 }
