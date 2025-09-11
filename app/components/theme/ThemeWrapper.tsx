@@ -4,6 +4,7 @@ import { Locale } from '@/app/models/locales';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
+import { useEffect, useState } from 'react';
 
 interface Pallete {
   palettePrimary: string;
@@ -140,10 +141,16 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
   });
 
 export default function ThemeWrapper({ children, lang }: { children: React.ReactNode; lang: Locale }) {
-  const theme = getTheme('dark', lang);
+  const [theme, setTheme] = useState<any>('dark');
+  const muiTheme = getTheme(theme, lang);
+
+  useEffect(() => {
+    const v = localStorage.getItem('theme') || 'light';
+    setTheme(v);
+  }, []);
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={muiTheme}>
       {children}
       <CssBaseline />
     </ThemeProvider>
