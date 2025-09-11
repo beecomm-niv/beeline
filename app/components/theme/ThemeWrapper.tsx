@@ -149,14 +149,6 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
         },
       },
 
-      MuiTabs: {
-        styleOverrides: {
-          indicator: {
-            backgroundColor: palette[mode].palleteSecondery,
-          },
-        },
-      },
-
       MuiSwitch: {
         styleOverrides: {
           track: {
@@ -185,7 +177,7 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
             fontSize: 18,
             color: palette[mode].textPrimary,
             '&.Mui-selected': {
-              color: palette[mode].palleteSecondery,
+              color: palette[mode].textPrimary,
             },
           },
         },
