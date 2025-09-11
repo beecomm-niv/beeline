@@ -5,6 +5,9 @@ import { ReactElement, useState } from 'react';
 
 import SettingsIcon from '@mui/icons-material/Settings';
 import MenuIcon from '@mui/icons-material/Menu';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+
 import { useAppStore } from '@/app/store/appStore-provider';
 import { Translate } from '@/app/utils/translate';
 
@@ -25,6 +28,8 @@ const routes: RouteItem[] = [
 const Drawer = () => {
   const lang = useAppStore((s) => s.lang);
   const translate = useAppStore((s) => s.translate);
+  const mode = useAppStore((s) => s.mode);
+  const setMode = useAppStore((s) => s.setMode);
 
   const [open, setOpen] = useState(false);
 
@@ -36,6 +41,9 @@ const Drawer = () => {
         </IconButton>
 
         <Typography fontSize={18}>מסעדת ביקום</Typography>
+        <Mode>
+          <IconButton onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}>{mode === 'light' ? <LightModeIcon /> : <DarkModeIcon />}</IconButton>
+        </Mode>
       </AppBar>
 
       <Divider />
@@ -62,6 +70,13 @@ const AppBar = styled('div')({
   gap: 8,
   padding: 10,
   paddingBottom: 15,
+  position: 'relative',
+});
+
+const Mode = styled('div')({
+  position: 'absolute',
+  insetInlineEnd: 0,
+  padding: '0 10px',
 });
 
 export default Drawer;

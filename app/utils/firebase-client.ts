@@ -14,20 +14,7 @@ const firebaseConfig = {
   measurementId: 'G-E0GNRMZ82J',
 };
 
-export class FirebaseClientUtils {
-  public static auth: clientAuth.Auth;
-  public static database: clientDb.Database;
+const app = initializeApp(firebaseConfig);
 
-  public static init = () => {
-    const app = initializeApp(firebaseConfig);
-
-    this.auth = clientAuth.getAuth(app);
-    this.database = clientDb.getDatabase(app);
-  };
-
-  public static signIn = async (email: string, password: string) => {
-    this.init();
-
-    await clientAuth.signInWithEmailAndPassword(this.auth, email, password);
-  };
-}
+export const REALTIME_DATABASE = clientDb.getDatabase(app);
+export const AUTH = clientAuth.getAuth(app);
