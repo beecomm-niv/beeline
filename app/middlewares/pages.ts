@@ -12,7 +12,6 @@ const routes: Route[] = [
   {
     pathname: '/login',
     useAuthGuard: false,
-    redirect: true,
   },
 
   {
@@ -48,15 +47,14 @@ const pageHandler = async (request: Request, path: string, locale: string) => {
     return new NextResponse('Not Found', { status: 404 });
   }
 
-  const needProccess = handler.useAuthGuard || handler.redirect;
-  if (!needProccess) return NextResponse.next();
+  if (!handler.useAuthGuard) return NextResponse.next();
 
   const c = await cookies();
   const token = c.get('sessionId')?.value;
 
   let body: JwtBody | null = null;
   if (token) {
-    body = await JwtUtils.verifyToken(token);
+    body = await JwtUtils.verifyToken<JwtBody>(token);
   }
 
   if (handler.useAuthGuard) {

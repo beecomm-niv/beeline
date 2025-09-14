@@ -48,6 +48,18 @@ export class ApiResponse<T> {
   }
 
   public static TokenIsMissing(): ApiResponse<null> {
-    return this.failure('Token is missing', 1003);
+    return this.failure('Token is missing', 1004);
+  }
+
+  public static CustomerHaveActiveReservation(): ApiResponse<null> {
+    return this.failure('The customer alrady have active reservation', 1005);
+  }
+
+  public static TooManyTries(): ApiResponse<null> {
+    return this.failure('Too many tries', 1006);
+  }
+
+  public static UnmatchedCode(): ApiResponse<null> {
+    return this.failure('The code is unmatched', 1007);
   }
 }

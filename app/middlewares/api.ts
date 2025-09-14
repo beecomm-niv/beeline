@@ -49,6 +49,16 @@ const routes: Route[] = [
     useAuthGuard: true,
     role: 'user',
   },
+
+  {
+    pathname: '/reservations/application/create',
+    useAuthGuard: false,
+  },
+
+  {
+    pathname: '/reservations/application/test',
+    useAuthGuard: false,
+  },
 ];
 
 const apiMiddleware = async (request: NextRequest, route: string) => {
@@ -68,7 +78,7 @@ const apiMiddleware = async (request: NextRequest, route: string) => {
         throw ApiResponse.Unauthorized();
       }
 
-      body = await JwtUtils.verifyToken(token);
+      body = await JwtUtils.verifyToken<JwtBody>(token);
       if (!body?.role || RoleLevel[body.role] < RoleLevel[handler.role]) {
         throw ApiResponse.Unauthorized();
       }

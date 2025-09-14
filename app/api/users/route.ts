@@ -1,4 +1,5 @@
 import { ApiResponse } from '@/app/models/api-response';
+import { JwtBody } from '@/app/models/jwt-body';
 import { UserDTO } from '@/app/models/user';
 import errorHandler from '@/app/utils/error-handler';
 import { JwtUtils } from '@/app/utils/jwt';
@@ -15,7 +16,7 @@ export const GET = async () =>
       throw ApiResponse.TokenIsMissing();
     }
 
-    const jwtBody = await JwtUtils.verifyToken(token);
+    const jwtBody = await JwtUtils.verifyToken<JwtBody>(token);
 
     if (!jwtBody) {
       throw ApiResponse.FailedToFetchUser();

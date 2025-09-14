@@ -1,0 +1,47 @@
+import { ApiResponse } from '@/app/models/api-response';
+import { ReservationApplication } from '@/app/models/reservation';
+import { CustomerUtils } from '@/app/utils/customers';
+import errorHandler from '@/app/utils/error-handler';
+import { JwtUtils } from '@/app/utils/jwt';
+import { NextResponse } from 'next/server';
+
+const TRIES_TRESHOLD = 5;
+
+export const POST = (request: Request) =>
+  errorHandler<boolean>(async () => {
+    const { code, token }: { code: string; token: string } = await request.json();
+
+    if (!code || !token) {
+      throw ApiResponse.InvalidBody();
+    }
+
+    const body = await JwtUtils.verifyToken<ReservationApplication>(token);
+    if (!body) {
+      throw ApiResponse.InvalidBody();
+    }
+
+    const customer = await CustomerUtils.getCustomerByPhone(body.phone);
+    if (!customer || customer.hasActiveReservation) {
+      throw ApiResponse.UnknownError();
+    }
+
+    if (customer.otp.tries >= TRIES_TRESHOLD) {
+      throw ApiResponse.TooManyTries();
+    }
+
+    const success = customer.otp.code === code;
+
+    if (success) {
+      customer.hasActiveReservation = true;
+      customer.otp = null!;
+    } else {
+      customer.otp.tries++;
+    }
+
+    await CustomerUtils.updateCustomer(customer);
+    if (!success) {
+      throw ApiResponse.UnmatchedCode();
+    }
+
+    return NextResponse.json(ApiResponse.success(true));
+  });
