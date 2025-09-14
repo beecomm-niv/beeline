@@ -1,18 +1,23 @@
-import { Reference } from 'firebase-admin/database';
-import databse from '../api/database';
 import { Branch } from '../models/branch';
+import { adminFirestore } from '../api/database';
+import { CollectionReference } from 'firebase-admin/firestore';
 
 export class BranchUtils {
-  private static ref: Reference = databse.app.ref('branches');
+  private static collection: CollectionReference = adminFirestore.collection('branches');
 
-  public static createBranch = async (branch: Branch) => {
-    await this.ref.child('/' + branch.id).set(branch);
+  public static createBranch = async (name: string): Promise<Branch> => {
+    const doc = this.collection.doc();
+    const data: Branch = { id: doc.id, name, lines: [] };
+
+    await doc.set(data);
+
+    return data;
   };
 
   public static getBranchById = async (id: string): Promise<Branch | null> => {
-    const data = await this.ref.child('/' + id).get();
+    const data = await this.collection.doc('/' + id).get();
 
-    return data.val() || null;
+    return (data.data() || null) as Branch | null;
   };
 
   public static updateBranch = async (branch: Partial<Branch>) => {
@@ -21,7 +26,7 @@ export class BranchUtils {
 
       delete branch.id;
 
-      await this.ref.child('/' + id).update(branch);
+      await this.collection.doc('/' + id).update(branch);
     }
   };
 }

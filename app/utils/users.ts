@@ -1,22 +1,48 @@
-import { Reference } from 'firebase-admin/database';
-import databse from '../api/database';
 import { User, UserDTO } from '../models/user';
 
-import * as crypto from 'crypto';
+import { CollectionReference } from 'firebase-admin/firestore';
+import { adminFirestore } from '../api/database';
 
 export class UsersUtils {
-  private static ref: Reference = databse.app.ref('users');
+  private static collection: CollectionReference = adminFirestore.collection('users');
 
   public static getUserByUid = async (userId: string): Promise<User | null> => {
-    const doc = await this.ref.child('/' + userId).get();
+    const doc = await this.collection.doc('/' + userId).get();
 
-    return doc.val() || null;
+    return (doc.data() || null) as User | null;
   };
 
-  public static convertEmailToUserId = (email: string) => crypto.createHash('md5').update(email).digest('hex');
+  public static getUserByEmail = async (email: string): Promise<User | null> => {
+    const data = await this.collection.where('email', '==', email).get();
 
-  public static createUser = async (user: User) => {
-    await this.ref.child('/' + user.userId).set(user);
+    if (data.docs.length !== 1) {
+      return null;
+    }
+
+    return data.docs[0].data() as User;
+  };
+
+  public static isEmailExist = async (email: string): Promise<boolean> => {
+    const data = await this.collection.where('email', '==', email).get();
+
+    return !data.empty;
+  };
+
+  public static createUser = async (email: string, password: string, name: string, phone: string): Promise<User> => {
+    const doc = this.collection.doc();
+    const data: User = {
+      branchId: '',
+      email,
+      name,
+      password,
+      phone,
+      role: 'user',
+      userId: doc.id,
+    };
+
+    await doc.set(data);
+
+    return data;
   };
 
   public static getUserDtoById = async (userId: string): Promise<UserDTO | null> => {
@@ -38,6 +64,6 @@ export class UsersUtils {
     delete user.email;
     delete user.role;
 
-    await this.ref.child('/' + data.userId).update(user);
+    await this.collection.doc('/' + data.userId).update(user);
   };
 }

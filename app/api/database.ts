@@ -1,43 +1,22 @@
 import * as admin from 'firebase-admin';
-import * as adminApp from 'firebase-admin/app';
-import * as adminDatabase from 'firebase-admin/database';
-import * as adminAuth from 'firebase-admin/auth';
+import * as admin_app from 'firebase-admin/app';
+import * as admin_realtime_database from 'firebase-admin/database';
+import * as admin_firestore from 'firebase-admin/firestore';
+import * as admin_auth from 'firebase-admin/auth';
 
-class Database {
-  private static instance: Database;
-
-  public app: admin.database.Database;
-  public auth: adminAuth.Auth;
-
-  public static getInstance(): Database {
-    if (!Database.instance) {
-      Database.instance = new Database();
-    }
-
-    return Database.instance;
-  }
-
-  private constructor() {
-    let app;
-
-    if (admin.apps.length === 0) {
-      app = admin.initializeApp({
-        credential: adminApp.cert({
+const app =
+  admin.apps.length > 0
+    ? admin.apps[0]
+    : admin.initializeApp({
+        credential: admin_app.cert({
           clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
           privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
           projectId: process.env.FIREBASE_PROJECT_ID,
         }),
+
         databaseURL: process.env.FIREBASE_DATABASE_URL,
       });
-    } else {
-      app = admin.app();
-    }
 
-    this.app = adminDatabase.getDatabase(app);
-    this.auth = adminAuth.getAuth(app);
-  }
-}
-
-const databse = Database.getInstance();
-
-export default databse;
+export const adminRealtimeDatabase = admin_realtime_database.getDatabase(app);
+export const adminAuth = admin_auth.getAuth(app);
+export const adminFirestore = admin_firestore.getFirestore(app);

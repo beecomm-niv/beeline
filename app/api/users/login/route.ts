@@ -19,8 +19,7 @@ export const POST = (request: Request) =>
       throw ApiResponse.BadUserOrPassword();
     }
 
-    const userId = UsersUtils.convertEmailToUserId(email);
-    const user = await UsersUtils.getUserByUid(userId);
+    const user = await UsersUtils.getUserByEmail(email);
 
     if (!user) {
       throw ApiResponse.BadUserOrPassword();
@@ -31,7 +30,7 @@ export const POST = (request: Request) =>
       throw ApiResponse.BadUserOrPassword();
     }
 
-    const token = await JwtUtils.getToken({ role: user.role, userId });
+    const token = await JwtUtils.getToken({ role: user.role, userId: user.userId });
 
     if (!token) {
       throw ApiResponse.FailedToFetchUser();

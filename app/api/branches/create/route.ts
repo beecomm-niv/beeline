@@ -3,7 +3,6 @@ import { Branch } from '@/app/models/branch';
 import { BranchUtils } from '@/app/utils/branch';
 import errorHandler from '@/app/utils/error-handler';
 import { NextResponse } from 'next/server';
-import { v4 } from 'uuid';
 
 export const POST = async (request: Request) =>
   errorHandler<Branch>(async () => {
@@ -13,10 +12,7 @@ export const POST = async (request: Request) =>
       throw ApiResponse.InvalidBody();
     }
 
-    const id = v4();
-    const branch: Branch = { id, name };
-
-    await BranchUtils.createBranch(branch);
+    const branch = await BranchUtils.createBranch(name);
 
     return NextResponse.json(ApiResponse.success(branch));
   });

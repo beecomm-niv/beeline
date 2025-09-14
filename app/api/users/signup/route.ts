@@ -1,11 +1,11 @@
 import { ApiResponse } from '@/app/models/api-response';
 import errorHandler from '@/app/utils/error-handler';
 import { UsersUtils } from '@/app/utils/users';
-import database from '../../database';
 import { hash } from 'bcrypt';
 import { JwtUtils } from '@/app/utils/jwt';
 import { NextResponse } from 'next/server';
 import { CookieUtils } from '@/app/utils/cookies';
+import { adminAuth } from '../../database';
 
 export const POST = async (request: Request) =>
   errorHandler<boolean>(async () => {
@@ -19,28 +19,19 @@ export const POST = async (request: Request) =>
       throw ApiResponse.InvalidBody();
     }
 
-    const userId = UsersUtils.convertEmailToUserId(email);
-    const user = await UsersUtils.getUserByUid(userId);
+    const isEmailExist = await UsersUtils.isEmailExist(email);
 
-    if (user) {
+    if (isEmailExist) {
       throw ApiResponse.UserAlradyExist();
     }
 
     const hashPassword = await hash(password, 12);
-    await UsersUtils.createUser({
-      email,
-      name,
-      phone,
-      password: hashPassword,
-      role: 'user',
-      userId,
-      branchId: '',
-    });
+    const user = await UsersUtils.createUser(email, hashPassword, name, phone);
 
-    await database.auth.createUser({ email, password, uid: userId });
-    await database.auth.setCustomUserClaims(userId, { uid: userId, role: 'user' });
+    await adminAuth.createUser({ email, password, uid: user.userId });
+    await adminAuth.setCustomUserClaims(user.userId, { uid: user.userId, domain: 'beeline' });
 
-    const token = await JwtUtils.getToken({ role: 'user', userId });
+    const token = await JwtUtils.getToken({ role: 'user', userId: user.userId });
 
     if (!token) {
       throw ApiResponse.FailedToFetchUser();
