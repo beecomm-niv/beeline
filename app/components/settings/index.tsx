@@ -29,7 +29,14 @@ const Settings = () => {
 
   return (
     <Box sx={{ padding: '10px' }}>
-      <Tabs value={selectedTab}>
+      <Tabs
+        value={selectedTab}
+        sx={{
+          '& .MuiTabs-list': {
+            justifyContent: 'center',
+          },
+        }}
+      >
         <Tab label='הגדרות תורים' value={1} onClick={() => setSelectedTab(1)} />
       </Tabs>
 

@@ -102,7 +102,7 @@ const ButtonsContainer = styled('div')({
 
 const LineItem = styled('div')((theme) => ({
   borderBottom: '1px solid ' + theme.theme.palette.text.secondary,
-  padding: 20,
+  padding: '20px 0',
   display: 'flex',
   justifyContent: 'space-between',
   marginTop: 30,

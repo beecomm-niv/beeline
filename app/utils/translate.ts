@@ -6,6 +6,7 @@ export interface Translate {
   loginSubmitButton: string;
 
   drawerSettingsLabel: string;
+  drawerHomeLabel: string;
 }
 
 export const translate: Record<Locale, Translate> = {
@@ -14,11 +15,13 @@ export const translate: Record<Locale, Translate> = {
     loginPasswordLabel: 'password',
     loginSubmitButton: 'login',
     drawerSettingsLabel: 'settings',
+    drawerHomeLabel: 'home',
   },
   he: {
     loginEmailLabel: 'מייל',
     loginPasswordLabel: 'סיסמא',
     loginSubmitButton: 'התחברות',
     drawerSettingsLabel: 'הגדרות',
+    drawerHomeLabel: 'בית',
   },
 };

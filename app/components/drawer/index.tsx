@@ -7,6 +7,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import MenuIcon from '@mui/icons-material/Menu';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import HomeIcon from '@mui/icons-material/Home';
 
 import { useAppStore } from '@/app/store/appStore-provider';
 import { Translate } from '@/app/utils/translate';
@@ -19,6 +20,11 @@ interface RouteItem {
 }
 
 const routes: RouteItem[] = [
+  {
+    path: 'management',
+    icon: <HomeIcon />,
+    title: 'drawerHomeLabel',
+  },
   {
     path: 'management/settings',
     icon: <SettingsIcon />,
