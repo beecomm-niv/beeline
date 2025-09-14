@@ -23,6 +23,11 @@ const routes: Route[] = [
     pathname: '/management/settings',
     useAuthGuard: true,
   },
+
+  {
+    pathname: '',
+    useAuthGuard: false,
+  },
 ];
 
 const pagesMiddleware = (request: NextRequest) => {

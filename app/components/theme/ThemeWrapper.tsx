@@ -25,10 +25,10 @@ const palette: Record<'light' | 'dark', Pallete> = {
     palettePrimary: '#1976d2',
     textPrimary: '#ffffff',
     textSecondery: 'gray',
-    defaultBackground: '#000000',
+    defaultBackground: '#212121',
     outlinedBackground: '#bbbbbbff',
     shrinkColor: '#ffffff',
-    papper: '#212121',
+    papper: '#2b2b2bff',
     palleteSecondery: '#edc210',
   },
   light: {

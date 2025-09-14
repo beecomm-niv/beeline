@@ -8,9 +8,14 @@ import { moment } from './dayjs';
 export class CustomerUtils {
   private static collection: CollectionReference = adminFirestore.collection('customers');
 
-  public static getCustomerByPhone = async (phone: string): Promise<Customer> => {
+  public static getCustomerByPhone = async (phone: string): Promise<Customer | null> => {
     const data = await this.collection.doc('/' + phone).get();
-    let customer = data.data() as Customer | null;
+
+    return data.data() as Customer | null;
+  };
+
+  public static getCustomerByPhoneWithDefaultOTP = async (phone: string): Promise<Customer> => {
+    let customer = await this.getCustomerByPhone(phone);
 
     if (!customer) {
       customer = {

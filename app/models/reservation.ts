@@ -1,12 +1,5 @@
-export interface Reservation {
+export interface Reservation extends ReservationApplication {
   id: number;
-
-  fullName: string;
-  phone: string;
-  dinners: number;
-  branchId: string;
-
-  lineId: string;
   ts: number;
 }
 

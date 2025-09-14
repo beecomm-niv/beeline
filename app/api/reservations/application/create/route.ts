@@ -18,7 +18,7 @@ export const POST = (request: Request) =>
       throw ApiResponse.InvalidBody();
     }
 
-    const customer = await CustomerUtils.getCustomerByPhone(phone);
+    const customer = await CustomerUtils.getCustomerByPhoneWithDefaultOTP(phone);
     if (customer.hasActiveReservation) {
       throw ApiResponse.CustomerHaveActiveReservation();
     }
@@ -38,7 +38,7 @@ export const POST = (request: Request) =>
     customer.otp.count++;
 
     await CustomerUtils.updateCustomer(customer);
-    const token = await JwtUtils.getToken(body);
+    const token = await JwtUtils.getToken(body, '5m');
 
     if (!token) {
       throw ApiResponse.UnknownError();
