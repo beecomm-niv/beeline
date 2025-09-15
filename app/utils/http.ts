@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { ApiResponse } from '../models/api-response';
 
 type Handler<T> = () => Promise<ApiResponse<T>>;
@@ -25,9 +25,9 @@ export class HttpUtils {
     }
   };
 
-  public static post = async <T>(path: string, data: any) =>
+  public static post = async <T>(path: string, data: any, config?: AxiosRequestConfig<any>) =>
     this.errorHandler(async () => {
-      const response = await this.instace.post<ApiResponse<T>>(path, data);
+      const response = await this.instace.post<ApiResponse<T>>(path, data, config);
 
       return response.data;
     });

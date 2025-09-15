@@ -1,14 +1,12 @@
-import useHttpRequest from '@/app/hooks/request';
 import { Branch } from '@/app/models/branch';
 import { ReservationApplication } from '@/app/models/reservation';
-import { HttpUtils } from '@/app/utils/http';
 import { Box, Button, Divider, MenuItem, Select, TextField } from '@mui/material';
 import { useRef, useState } from 'react';
 
 interface Props {
   branch: Branch;
-  setToken: (token: string) => void;
-  setApplication: (a: ReservationApplication) => void;
+  onSendOTP: (application: ReservationApplication) => void;
+  isLoading: boolean;
 }
 
 const ApplicationForm = (props: Props) => {
@@ -20,26 +18,16 @@ const ApplicationForm = (props: Props) => {
 
   const [selectedDinners, setSelectedDinners] = useState<string>('');
 
-  const { loading, request } = useHttpRequest();
-
   const onSubmit = async () => {
     if (!name || !surName || !phone || !selectedDinners) {
       return window.alert('כל השדות חובה');
     }
 
-    const application: ReservationApplication = {
-      branchId: props.branch.id,
+    props.onSendOTP({
+      branchId: undefined!,
       dinners: selectedDinners,
       fullName: `${name} ${surName}`,
       phone,
-    };
-
-    request({
-      request: () => HttpUtils.post<string>('/reservations/application/create', application),
-      onSuccess: (res) => {
-        props.setToken(res);
-        props.setApplication(application);
-      },
     });
   };
 
@@ -80,7 +68,7 @@ const ApplicationForm = (props: Props) => {
       </Select>
 
       <Box sx={{ position: 'absolute', bottom: 0, padding: 2, width: '100%' }}>
-        <Button onClick={onSubmit} variant='contained' fullWidth disabled={loading}>
+        <Button onClick={onSubmit} variant='contained' fullWidth disabled={props.isLoading}>
           הרשמה
         </Button>
       </Box>

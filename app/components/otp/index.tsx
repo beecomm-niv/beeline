@@ -3,10 +3,13 @@
 import { Box, Button, styled, TextField, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 
-const TIMEOUT_LENGTH = 59;
+const TIMEOUT_LENGTH = 10;
 
 interface Props {
   phone: string;
+  onSubmit: (code: string) => void;
+  isLoading: boolean;
+  onResend: () => void;
 }
 
 export const OTP = (props: Props) => {
@@ -54,7 +57,12 @@ export const OTP = (props: Props) => {
   }, []);
 
   const onResend = () => {
+    props.onResend();
     onSetTimer();
+  };
+
+  const onSubmit = () => {
+    props.onSubmit(code.join(''));
   };
 
   return (
@@ -84,11 +92,15 @@ export const OTP = (props: Props) => {
 
       <Box sx={{ marginTop: 2 }}>
         {timer > 0 && <Typography>לא קיבלתם קוד ? נשלח שוב בעוד 0:{timer.toString().padStart(2, '0')}</Typography>}
-        {timer === 0 && <Button onClick={onResend}>שלח שוב</Button>}
+        {timer === 0 && (
+          <Button onClick={onResend} disabled={props.isLoading} variant='outlined'>
+            שלח שוב
+          </Button>
+        )}
       </Box>
 
       <Box sx={{ position: 'fixed', bottom: 0, width: '100%', padding: 2 }}>
-        <Button fullWidth variant='contained'>
+        <Button fullWidth variant='contained' onClick={onSubmit} disabled={props.isLoading}>
           שליחה
         </Button>
       </Box>

@@ -9,14 +9,19 @@ const TRIES_TRESHOLD = 5;
 
 export const POST = (request: Request) =>
   errorHandler<boolean>(async () => {
-    const { code, token }: { code: string; token: string } = await request.json();
+    const accessToken = request.headers.get('access_token');
+    if (!accessToken) {
+      throw ApiResponse.UnknownError();
+    }
 
-    if (!code || !token) {
+    const body = await JwtUtils.verifyToken<ReservationApplication>(accessToken);
+    if (!body) {
       throw ApiResponse.InvalidBody();
     }
 
-    const body = await JwtUtils.verifyToken<ReservationApplication>(token);
-    if (!body) {
+    const { code }: { code: string } = await request.json();
+
+    if (!code) {
       throw ApiResponse.InvalidBody();
     }
 

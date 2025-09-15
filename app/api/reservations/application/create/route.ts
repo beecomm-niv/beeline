@@ -10,7 +10,18 @@ const COUNT_TRESHOLD = 5;
 
 export const POST = (request: Request) =>
   errorHandler<string>(async () => {
+    const accessToken = request.headers.get('access_token');
+    if (!accessToken) {
+      throw ApiResponse.UnknownError();
+    }
+
+    const payload = await JwtUtils.verifyToken<{ branchId: string }>(accessToken);
+    if (!payload) {
+      throw ApiResponse.UnknownError();
+    }
+
     const body: ReservationApplication = await request.json();
+    body.branchId = payload.branchId;
 
     const { branchId, dinners, fullName, phone } = body;
 

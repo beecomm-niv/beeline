@@ -32,7 +32,7 @@ export class CustomerUtils {
     return customer;
   };
 
-  public static getNewCode = () => crypto.randomInt(10000, 100000).toString();
+  public static getNewCode = () => crypto.randomInt(1000, 10000).toString();
 
   public static updateCustomer = async (customer: Customer) => {
     await this.collection.doc('/' + customer.phone).set(customer);
