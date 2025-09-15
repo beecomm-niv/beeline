@@ -13,7 +13,7 @@ export default async function ReservationPage({ searchParams }: { searchParams: 
     return <div>Welcome</div>;
   }
 
-  const accessToken = await JwtUtils.getToken({ branchId }, '5min');
+  const accessToken = await JwtUtils.getToken({ branchId }, '5m');
   if (!accessToken) {
     return <div>Welcome</div>;
   }
