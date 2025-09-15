@@ -22,17 +22,17 @@ const hebImplment = (lang: Locale, classValue: string) => (lang === 'he' ? class
 
 const palette: Record<'light' | 'dark', Pallete> = {
   dark: {
-    palettePrimary: '#1976d2',
+    palettePrimary: '#0e9524',
     textPrimary: '#ffffff',
-    textSecondery: 'gray',
-    defaultBackground: '#212121',
+    textSecondery: '#c9c9c9ff',
+    defaultBackground: '#000000',
     outlinedBackground: '#bbbbbbff',
-    shrinkColor: '#ffffff',
-    papper: '#2b2b2bff',
+    shrinkColor: '#e0e0e0ff',
+    papper: '#212121',
     palleteSecondery: '#edc210',
   },
   light: {
-    palettePrimary: '#1976d2',
+    palettePrimary: '#0e9524',
     textPrimary: '#000000',
     defaultBackground: 'rgb(245, 245, 245)',
     outlinedBackground: '#c7c7c7ff',
@@ -79,16 +79,9 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
 
       MuiOutlinedInput: {
         styleOverrides: {
-          notchedOutline: {
-            borderColor: `${palette[mode].outlinedBackground} !important`,
-          },
           root: {
-            '&:hover .MuiOutlinedInput-notchedOutline': {
-              border: '1px solid #929292ff !important',
-            },
-            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              border: '1px solid #929292ff !important',
-            },
+            backgroundColor: palette[mode].papper,
+            borderRadius: 10,
           },
         },
       },
@@ -111,6 +104,7 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
           root: {
             '& fieldset': {
               textAlign: hebImplment(lang, 'right'),
+              border: 'none',
             },
           },
         },
@@ -144,7 +138,8 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
       MuiDivider: {
         styleOverrides: {
           root: {
-            border: '1px solid ' + palette[mode].papper,
+            borderColor: palette[mode].papper,
+            width: '100%',
           },
         },
       },
@@ -153,20 +148,6 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
         styleOverrides: {
           track: {
             backgroundColor: palette[mode].textPrimary,
-          },
-        },
-      },
-
-      MuiFilledInput: {
-        styleOverrides: {
-          root: {
-            backgroundColor: palette[mode].papper,
-            '&.Mui-focused': {
-              backgroundColor: `${palette[mode].papper} !important`,
-            },
-            '&:hover': {
-              backgroundColor: `${palette[mode].papper} !important`,
-            },
           },
         },
       },

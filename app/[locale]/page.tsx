@@ -1,6 +1,5 @@
-export default async function Home({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
-  const params = await searchParams;
+import { notFound } from 'next/navigation';
 
-  console.log(params.q);
-  return <div>{params.q}</div>;
+export default async function Home() {
+  return notFound();
 }

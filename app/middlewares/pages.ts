@@ -25,6 +25,11 @@ const routes: Route[] = [
   },
 
   {
+    pathname: '/reservation/*',
+    useAuthGuard: false,
+  },
+
+  {
     pathname: '',
     useAuthGuard: false,
   },
@@ -47,7 +52,13 @@ const pagesMiddleware = (request: NextRequest) => {
 };
 
 const pageHandler = async (request: Request, path: string, locale: string) => {
-  const handler = routes.find((r) => r.pathname === path);
+  const handler = routes.find((r) => {
+    if (r.pathname.endsWith('/*')) {
+      return path.startsWith(r.pathname.replace('/*', ''));
+    }
+
+    return r.pathname === path;
+  });
   if (!handler) {
     return new NextResponse('Not Found', { status: 404 });
   }
