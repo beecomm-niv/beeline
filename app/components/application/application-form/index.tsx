@@ -1,3 +1,4 @@
+import useHttpRequest from '@/app/hooks/request';
 import { Branch } from '@/app/models/branch';
 import { ReservationApplication } from '@/app/models/reservation';
 import { HttpUtils } from '@/app/utils/http';
@@ -19,6 +20,8 @@ const ApplicationForm = (props: Props) => {
 
   const [selectedDinners, setSelectedDinners] = useState<string>('');
 
+  const { loading, request } = useHttpRequest();
+
   const onSubmit = async () => {
     if (!name || !surName || !phone || !selectedDinners) {
       return window.alert('כל השדות חובה');
@@ -31,14 +34,13 @@ const ApplicationForm = (props: Props) => {
       phone,
     };
 
-    const result = await HttpUtils.post<string>('/reservations/application/create', application);
-
-    if (result.hasError) {
-      return window.alert(result.errorMessage);
-    }
-
-    props.setToken(result.value);
-    props.setApplication(application);
+    request({
+      request: () => HttpUtils.post<string>('/reservations/application/create', application),
+      onSuccess: (res) => {
+        props.setToken(res);
+        props.setApplication(application);
+      },
+    });
   };
 
   return (
@@ -78,7 +80,7 @@ const ApplicationForm = (props: Props) => {
       </Select>
 
       <Box sx={{ position: 'absolute', bottom: 0, padding: 2, width: '100%' }}>
-        <Button onClick={onSubmit} variant='contained' fullWidth>
+        <Button onClick={onSubmit} variant='contained' fullWidth disabled={loading}>
           הרשמה
         </Button>
       </Box>
