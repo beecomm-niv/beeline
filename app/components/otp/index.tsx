@@ -111,6 +111,7 @@ export const OTP = (props: Props) => {
 const Input = styled(TextField)({
   '& .MuiInputBase-root': {
     borderRadius: '100%',
+    paddingTop: 0,
   },
   '& .MuiInputBase-input': {
     height: 30,

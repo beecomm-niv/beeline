@@ -13,7 +13,6 @@ interface Pallete {
   textPrimary: string;
   defaultBackground: string;
   outlinedBackground: string;
-  shrinkColor: string;
   papper: string;
   textSecondery: string;
 }
@@ -22,21 +21,19 @@ const hebImplment = (lang: Locale, classValue: string) => (lang === 'he' ? class
 
 const palette: Record<'light' | 'dark', Pallete> = {
   dark: {
-    palettePrimary: '#0e9524',
+    palettePrimary: '#edc210',
     textPrimary: '#ffffff',
     textSecondery: '#c9c9c9ff',
     defaultBackground: '#000000',
     outlinedBackground: '#bbbbbbff',
-    shrinkColor: '#e0e0e0ff',
     papper: '#212121',
     palleteSecondery: '#edc210',
   },
   light: {
-    palettePrimary: '#0e9524',
+    palettePrimary: '#edc210',
     textPrimary: '#000000',
     defaultBackground: 'rgb(245, 245, 245)',
     outlinedBackground: '#c7c7c7ff',
-    shrinkColor: '#000000',
     papper: '#d4d4d4',
     palleteSecondery: '#edc210',
     textSecondery: 'gray',
@@ -71,8 +68,8 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
             color: `${palette[mode].textPrimary} !important`,
           },
           shrink: {
-            transform: hebImplment(lang, 'translate(-14px, -10px) scale(0.75) !important'),
-            color: `${palette[mode].shrinkColor} !important`,
+            transform: hebImplment(lang, 'translate(-14px, 2px) scale(0.75) !important'),
+            color: `${palette[mode].palettePrimary} !important`,
           },
         },
       },
@@ -82,6 +79,7 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
           root: {
             backgroundColor: palette[mode].papper,
             borderRadius: 10,
+            paddingTop: 2,
           },
         },
       },
@@ -93,7 +91,7 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
             right: hebImplment(lang, '0 !important'),
             transform: hebImplment(lang, 'translate(-14px, 16px) scale(1) !important'),
             '&.Mui-focused': {
-              transform: hebImplment(lang, 'translate(-14px, -10px) scale(0.75) !important'),
+              transform: hebImplment(lang, 'translate(-14px, 2px) scale(0.75) !important'),
             },
           },
         },
