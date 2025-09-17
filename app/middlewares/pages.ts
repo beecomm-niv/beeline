@@ -64,6 +64,7 @@ const pageHandler = async (request: Request, path: string, locale: string) => {
 
     return r.pathname === path;
   });
+
   if (!handler) {
     return new NextResponse('Not Found', { status: 404 });
   }
@@ -78,22 +79,14 @@ const pageHandler = async (request: Request, path: string, locale: string) => {
     body = await JwtUtils.verifyToken<JwtBody>(token);
   }
 
-  if (handler.useAuthGuard) {
-    if (!body) {
-      return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
-    }
-
-    const response = NextResponse.next();
-    response.headers.append('x-authenticated-user', body.userId);
-
-    return response;
+  if (!body) {
+    return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
   }
 
-  if (body) {
-    return NextResponse.redirect(new URL(`/${locale}/management`, request.url));
-  }
+  const response = NextResponse.next();
+  response.headers.append('x-authenticated-user', body.userId);
 
-  return NextResponse.next();
+  return response;
 };
 
 export default pagesMiddleware;
