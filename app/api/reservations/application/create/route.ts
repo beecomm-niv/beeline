@@ -4,6 +4,7 @@ import { CustomerUtils } from '@/app/utils/customers';
 import { moment } from '@/app/utils/dayjs';
 import errorHandler from '@/app/utils/error-handler';
 import { JwtUtils } from '@/app/utils/jwt';
+import { SmsUtils } from '@/app/utils/sms';
 import { NextResponse } from 'next/server';
 
 const COUNT_TRESHOLD = 5;
@@ -45,6 +46,8 @@ export const POST = (request: Request) =>
     } else {
       customer.otp = CustomerUtils.createOtp();
     }
+
+    await SmsUtils.sendMessage(body.branchId, phone, customer.otp.code);
 
     customer.otp.count++;
 

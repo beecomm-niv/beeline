@@ -62,4 +62,12 @@ export class ApiResponse<T> {
   public static UnmatchedCode(): ApiResponse<null> {
     return this.failure('The code is unmatched', 1007);
   }
+
+  public static InvalidSmsSettings(): ApiResponse<null> {
+    return this.failure('The sms settings is invalid', 1008);
+  }
+
+  public static SmsMessageError(message: string): ApiResponse<null> {
+    return this.failure(message, 1009);
+  }
 }

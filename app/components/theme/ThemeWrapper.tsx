@@ -79,7 +79,9 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
           root: {
             backgroundColor: palette[mode].papper,
             borderRadius: 10,
-            paddingTop: 2,
+          },
+          input: {
+            padding: '17.5px 14px',
           },
         },
       },
@@ -89,7 +91,7 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
           root: {
             transformOrigin: hebImplment(lang, 'top right !important'),
             right: hebImplment(lang, '0 !important'),
-            transform: hebImplment(lang, 'translate(-14px, 16px) scale(1) !important'),
+            transform: hebImplment(lang, 'translate(-14px, 18px) scale(1) !important'),
             '&.Mui-focused': {
               transform: hebImplment(lang, 'translate(-14px, 2px) scale(0.75) !important'),
             },

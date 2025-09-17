@@ -3,7 +3,7 @@
 import { Box, Button, styled, TextField, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 
-const TIMEOUT_LENGTH = 10;
+const TIMEOUT_LENGTH = 59;
 
 interface Props {
   phone: string;
@@ -23,10 +23,10 @@ export const OTP = (props: Props) => {
 
   const timeout = useRef<NodeJS.Timeout | undefined>(undefined);
 
-  const onChange = (val: string, index: number, currentRef: HTMLInputElement | null, nextRef: HTMLInputElement | null) => {
+  const onChange = (val: string, index: number, currentRef: HTMLInputElement | null, nextRef: HTMLInputElement | null, prevRef: HTMLInputElement | null) => {
     setCode((c) => {
       const clone = [...c];
-      clone[index] = val;
+      clone[index] = val.at(-1) || '';
       return clone;
     });
 
@@ -35,6 +35,8 @@ export const OTP = (props: Props) => {
       if (!nextRef) {
         currentRef?.blur();
       }
+    } else {
+      prevRef?.focus();
     }
   };
 
@@ -84,10 +86,10 @@ export const OTP = (props: Props) => {
       </Typography>
 
       <Box sx={{ display: 'flex', gap: 2, marginTop: 5, direction: 'ltr' }}>
-        <Input inputRef={ref1} value={code[0]} onChange={(e) => onChange(e.target.value, 0, ref1.current, ref2.current)} />
-        <Input inputRef={ref2} value={code[1]} onChange={(e) => onChange(e.target.value, 1, ref2.current, ref3.current)} />
-        <Input inputRef={ref3} value={code[2]} onChange={(e) => onChange(e.target.value, 2, ref3.current, ref4.current)} />
-        <Input inputRef={ref4} value={code[3]} onChange={(e) => onChange(e.target.value, 3, ref4.current, null)} />
+        <Input inputRef={ref1} value={code[0]} onChange={(e) => onChange(e.target.value, 0, ref1.current, ref2.current, null)} />
+        <Input inputRef={ref2} value={code[1]} onChange={(e) => onChange(e.target.value, 1, ref2.current, ref3.current, ref1.current)} />
+        <Input inputRef={ref3} value={code[2]} onChange={(e) => onChange(e.target.value, 2, ref3.current, ref4.current, ref2.current)} />
+        <Input inputRef={ref4} value={code[3]} onChange={(e) => onChange(e.target.value, 3, ref4.current, null, ref3.current)} />
       </Box>
 
       <Box sx={{ marginTop: 2 }}>
