@@ -8,6 +8,7 @@ import { OTP } from '../otp';
 import { ReservationApplication } from '@/app/models/reservation';
 import { HttpUtils } from '@/app/utils/http';
 import useHttpRequest from '@/app/hooks/request';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   branch: Branch;
@@ -21,8 +22,10 @@ const Application = (props: Props) => {
   const sendOTPApi = useHttpRequest();
   const testCodeApi = useHttpRequest();
 
+  const router = useRouter();
+
   const onSubmitCode = (code: string) => {
-    testCodeApi.request({
+    testCodeApi.request<string>({
       request: () =>
         HttpUtils.post(
           '/reservations/application/test',
@@ -33,7 +36,7 @@ const Application = (props: Props) => {
             },
           }
         ),
-      onSuccess: console.log,
+      onSuccess: (reservationId) => router.push(`/track/${reservationId}`),
     });
   };
 

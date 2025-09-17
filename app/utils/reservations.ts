@@ -4,6 +4,9 @@ import { CustomerReservation, LightReservation, Reservation, ReservationApplicat
 import { moment } from './dayjs';
 
 export class ReservationUtils {
+  private static reservationRef = adminRealtimeDatabase.ref('reservations');
+  private static customerReservationsRef = adminRealtimeDatabase.ref('c_line');
+
   public static signReservation = async (application: ReservationApplication) => {
     const reservation = this.createReservationFromApplication(application);
 
@@ -27,4 +30,16 @@ export class ReservationUtils {
     phone: application.phone,
     ts: moment().valueOf(),
   });
+
+  public static getReservation = async (id: string): Promise<CustomerReservation | null> => {
+    const data = await this.reservationRef.child('/' + id).get();
+
+    return data.val() as CustomerReservation | null;
+  };
+
+  public static getCustomerReservationLine = async (branchId: string): Promise<Record<string, LightReservation> | null> => {
+    const data = await this.customerReservationsRef.child('/' + branchId).get();
+
+    return data.val() as Record<string, LightReservation> | null;
+  };
 }
