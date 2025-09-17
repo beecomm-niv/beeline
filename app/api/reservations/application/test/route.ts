@@ -3,12 +3,15 @@ import { ReservationApplication } from '@/app/models/reservation';
 import { CustomerUtils } from '@/app/utils/customers';
 import errorHandler from '@/app/utils/error-handler';
 import { JwtUtils } from '@/app/utils/jwt';
+import { ReservationUtils } from '@/app/utils/reservations';
 import { NextResponse } from 'next/server';
 
 const TRIES_TRESHOLD = 5;
 
 export const POST = (request: Request) =>
-  errorHandler<boolean>(async () => {
+  errorHandler<string>(async () => {
+    let result = '';
+
     const accessToken = request.headers.get('access_token');
     if (!accessToken) {
       throw ApiResponse.UnknownError();
@@ -39,6 +42,9 @@ export const POST = (request: Request) =>
     if (success) {
       customer.hasActiveReservation = true;
       customer.otp = null!;
+
+      const reservation = await ReservationUtils.signReservation(body);
+      result = reservation.id;
     } else {
       customer.otp.tries++;
     }
@@ -48,5 +54,5 @@ export const POST = (request: Request) =>
       throw ApiResponse.UnmatchedCode();
     }
 
-    return NextResponse.json(ApiResponse.success(true));
+    return NextResponse.json(ApiResponse.success(result));
   });

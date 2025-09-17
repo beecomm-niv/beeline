@@ -79,9 +79,7 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
           root: {
             backgroundColor: palette[mode].papper,
             borderRadius: 10,
-          },
-          input: {
-            padding: '17.5px 14px',
+            paddingTop: 4,
           },
         },
       },

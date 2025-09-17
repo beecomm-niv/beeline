@@ -33,6 +33,11 @@ const routes: Route[] = [
     pathname: '',
     useAuthGuard: false,
   },
+
+  {
+    pathname: '/track/*',
+    useAuthGuard: false,
+  },
 ];
 
 const pagesMiddleware = (request: NextRequest) => {
