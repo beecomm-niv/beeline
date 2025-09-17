@@ -1,7 +1,14 @@
 import { Branch } from '@/app/models/branch';
 import { ReservationApplication } from '@/app/models/reservation';
+import { StorageUtils } from '@/app/utils/storage';
 import { Box, Button, Divider, MenuItem, Select, TextField } from '@mui/material';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+interface CacheUser {
+  name: string;
+  surName: string;
+  phone: string;
+}
 
 interface Props {
   branch: Branch;
@@ -18,10 +25,27 @@ const ApplicationForm = (props: Props) => {
 
   const [selectedDinners, setSelectedDinners] = useState<string>('');
 
+  useEffect(() => {
+    const user: CacheUser = StorageUtils.getItem('user', true);
+    if (user) {
+      setName(user.name);
+      setSurName(user.surName);
+      setPhone(user.phone);
+    }
+  }, []);
+
   const onSubmit = async () => {
     if (!name || !surName || !phone || !selectedDinners) {
       return window.alert('כל השדות חובה');
     }
+
+    const storageValue: CacheUser = {
+      name,
+      phone,
+      surName,
+    };
+
+    StorageUtils.setItem('user', storageValue);
 
     props.onSendOTP({
       branchId: undefined!,
