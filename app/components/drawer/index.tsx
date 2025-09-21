@@ -3,7 +3,7 @@
 import { Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, Drawer as MuiDrawer, styled, Typography } from '@mui/material';
 import { ReactElement, useState } from 'react';
 
-import SettingsIcon from '@mui/icons-material/Settings';
+import PendingIcon from '@mui/icons-material/Pending';
 import MenuIcon from '@mui/icons-material/Menu';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
@@ -26,9 +26,9 @@ const routes: RouteItem[] = [
     title: 'drawerHomeLabel',
   },
   {
-    path: 'management/settings',
-    icon: <SettingsIcon />,
-    title: 'drawerSettingsLabel',
+    path: 'management/line-settings',
+    icon: <PendingIcon />,
+    title: 'drawerLineSettingsLabel',
   },
 ];
 

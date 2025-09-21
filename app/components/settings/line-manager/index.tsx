@@ -1,22 +1,18 @@
 'use client';
 
-import { Branch, Line } from '@/app/models/branch';
+import useBranchAction from '@/app/hooks/useBranchUpdate';
+import { Line } from '@/app/models/branch';
 import { Box, Button, Chip, styled, Switch, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 
-interface Props {
-  branch: Branch;
-  saveBranch: (b: Branch) => Promise<void>;
-  loading: boolean;
-}
-
-const LineManager = (props: Props) => {
-  const [lines, setLines] = useState<Line[]>(props.branch.lines || []);
+const LineManager = () => {
+  const { branch, loading, saveBranch } = useBranchAction();
+  const [lines, setLines] = useState<Line[]>(branch.lines || []);
 
   useEffect(() => {
-    setLines(props.branch.lines || []);
-  }, [props.branch.lines]);
+    setLines(branch.lines || []);
+  }, [branch.lines]);
 
   const onAddLine = () => {
     setLines((l) => [...l, { id: v4(), active: true, dinnersRange: [] }]);
@@ -55,17 +51,17 @@ const LineManager = (props: Props) => {
       }
     }
 
-    props.saveBranch({ ...props.branch, lines });
+    saveBranch({ ...branch, lines });
   };
 
   return (
-    <Box sx={{ textAlign: 'center' }}>
+    <Box sx={{ textAlign: 'center', marginTop: 5, padding: '0 10px' }}>
       <ButtonsContainer>
-        <Button variant='contained' onClick={onAddLine} disabled={props.loading}>
+        <Button variant='contained' onClick={onAddLine} disabled={loading}>
           הוסף תור +
         </Button>
 
-        <Button variant='contained' color='primary' disabled={props.loading} onClick={onSave}>
+        <Button variant='contained' color='primary' disabled={loading} onClick={onSave}>
           שמירה
         </Button>
       </ButtonsContainer>

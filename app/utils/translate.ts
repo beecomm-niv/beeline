@@ -5,7 +5,7 @@ export interface Translate {
   loginPasswordLabel: string;
   loginSubmitButton: string;
 
-  drawerSettingsLabel: string;
+  drawerLineSettingsLabel: string;
   drawerHomeLabel: string;
 }
 
@@ -14,14 +14,14 @@ export const translate: Record<Locale, Translate> = {
     loginEmailLabel: 'email',
     loginPasswordLabel: 'password',
     loginSubmitButton: 'login',
-    drawerSettingsLabel: 'settings',
+    drawerLineSettingsLabel: 'Lines Settings',
     drawerHomeLabel: 'home',
   },
   he: {
     loginEmailLabel: 'מייל',
     loginPasswordLabel: 'סיסמא',
     loginSubmitButton: 'התחברות',
-    drawerSettingsLabel: 'הגדרות',
+    drawerLineSettingsLabel: 'ניהול תור',
     drawerHomeLabel: 'בית',
   },
 };

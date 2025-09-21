@@ -22,12 +22,7 @@ const routes: Route[] = [
   },
 
   {
-    pathname: '/management',
-    useAuthGuard: true,
-  },
-
-  {
-    pathname: '/management/settings',
+    pathname: '/management/*',
     useAuthGuard: true,
   },
 
