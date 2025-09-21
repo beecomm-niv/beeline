@@ -4,10 +4,10 @@ import { useAppStore } from '@/app/store/appStore-provider';
 import { AUTH } from '@/app/utils/firebase-client';
 import { HttpUtils } from '@/app/utils/http';
 import { Button, styled, TextField } from '@mui/material';
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 
 const LoginWithMailAndPassword = () => {
   const [email, setEmail] = React.useState('');
@@ -30,10 +30,6 @@ const LoginWithMailAndPassword = () => {
     await signInWithEmailAndPassword(AUTH, email, password);
     router.replace(`${prefix}management`);
   };
-
-  useEffect(() => {
-    signOut(AUTH);
-  }, []);
 
   return (
     <Container>
