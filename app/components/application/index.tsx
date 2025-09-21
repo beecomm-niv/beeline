@@ -63,11 +63,7 @@ const Application = (props: Props) => {
 
   return (
     <>
-      <Fade in={!token} unmountOnExit>
-        <div>
-          <ApplicationForm branch={props.branch} isLoading={sendOTPApi.loading} onSendOTP={onSendOTP} />
-        </div>
-      </Fade>
+      {!token && <ApplicationForm branch={props.branch} isLoading={sendOTPApi.loading} onSendOTP={onSendOTP} />}
       <Fade in={!!token} timeout={200} unmountOnExit>
         <div>
           <OTP phone={application?.phone || ''} isLoading={sendOTPApi.loading || testCodeApi.loading} onSubmit={onSubmitCode} onResend={onResend} />
