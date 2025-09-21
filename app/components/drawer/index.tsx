@@ -34,6 +34,7 @@ const routes: RouteItem[] = [
 
 const Drawer = () => {
   const lang = useAppStore((s) => s.lang);
+  const prefix = useAppStore((s) => s.urlPrefix);
   const translate = useAppStore((s) => s.translate);
   const mode = useAppStore((s) => s.mode);
   const setMode = useAppStore((s) => s.setMode);
@@ -42,7 +43,7 @@ const Drawer = () => {
   const router = useRouter();
 
   const onRoute = (path: string) => {
-    router.push('/' + path);
+    router.push(prefix + path);
     setOpen(false);
   };
 

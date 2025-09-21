@@ -4,6 +4,13 @@ import { Route } from '../models/route';
 import { cookies } from 'next/headers';
 import { JwtUtils } from '../utils/jwt';
 import { JwtBody } from '../models/jwt-body';
+import { NextURL } from 'next/dist/server/web/next-url';
+
+interface UrlSettings {
+  locale: Locale;
+  rewrite: NextURL | null;
+  validPath: string;
+}
 
 const locales: Locale[] = ['he', 'en'];
 const defaultLocale: Locale = 'he';
@@ -40,51 +47,58 @@ const routes: Route[] = [
   },
 ];
 
-const pagesMiddleware = (request: NextRequest) => {
-  const { pathname } = request.nextUrl;
+const getUrlSettings = (requestUrl: NextURL): UrlSettings => {
+  const currentPath = requestUrl.pathname;
+  const response: UrlSettings = { locale: defaultLocale, rewrite: null, validPath: currentPath };
 
-  const locale = locales.find((locale) => pathname.startsWith(`/${locale}`));
+  const requestLocale = locales.find((locale) => currentPath.startsWith(`/${locale}`));
 
-  if (locale) {
-    const path = pathname.replace(`/${locale}`, '');
-    return pageHandler(request, path, locale);
+  if (requestLocale) {
+    response.locale = requestLocale;
+    response.validPath = currentPath.replace(`/${requestLocale}`, '');
+  } else {
+    response.rewrite = requestUrl.clone();
+    response.rewrite.pathname = `/${defaultLocale}${currentPath}`;
   }
 
-  const url = request.nextUrl.clone();
-  url.pathname = `/${defaultLocale}${pathname}`;
-
-  return NextResponse.redirect(url);
+  return response;
 };
 
-const pageHandler = async (request: Request, path: string, locale: string) => {
+const pagesMiddleware = async (request: NextRequest) => {
+  const settings = getUrlSettings(request.nextUrl);
+
   const handler = routes.find((r) => {
     if (r.pathname.endsWith('/*')) {
-      return path.startsWith(r.pathname.replace('/*', ''));
+      return settings.validPath.startsWith(r.pathname.replace('/*', ''));
     }
 
-    return r.pathname === path;
+    return r.pathname === settings.validPath;
   });
 
   if (!handler) {
     return new NextResponse('Not Found', { status: 404 });
   }
 
-  if (!handler.useAuthGuard) return NextResponse.next();
+  let authPayload: JwtBody | null = null;
 
-  const c = await cookies();
-  const token = c.get('sessionId')?.value;
+  if (handler.useAuthGuard) {
+    const c = await cookies();
+    const token = c.get('sessionId')?.value;
 
-  let body: JwtBody | null = null;
-  if (token) {
-    body = await JwtUtils.verifyToken<JwtBody>(token);
+    if (token) {
+      authPayload = await JwtUtils.verifyToken<JwtBody>(token);
+    }
+
+    if (!authPayload) {
+      return NextResponse.redirect(new URL(`/${settings.locale}/login`, request.url));
+    }
   }
 
-  if (!body) {
-    return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
-  }
+  const response: NextResponse = settings.rewrite ? NextResponse.rewrite(settings.rewrite) : NextResponse.next();
 
-  const response = NextResponse.next();
-  response.headers.append('x-authenticated-user', body.userId);
+  if (authPayload) {
+    response.headers.append('x-authenticated-user', authPayload.userId);
+  }
 
   return response;
 };

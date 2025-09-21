@@ -10,4 +10,5 @@ export interface AppStore extends AppStoreInit {
   setMode: (mode: 'dark' | 'light') => void;
 
   translate: Translate;
+  urlPrefix: string;
 }

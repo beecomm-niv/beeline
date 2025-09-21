@@ -8,6 +8,7 @@ import { translate } from '../utils/translate';
 const createAppStore = (init: AppStoreInit) =>
   createStore<AppStore>((set) => ({
     lang: init.lang,
+    urlPrefix: init.lang === 'he' ? '/' : `/${init.lang}/`,
     translate: translate[init.lang],
     mode: 'dark',
     setMode: (mode) => set({ mode }),
