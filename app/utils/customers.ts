@@ -20,7 +20,7 @@ export class CustomerUtils {
     if (!customer) {
       customer = {
         phone,
-        hasActiveReservation: false,
+        activeReservationId: '',
         otp: undefined!,
       };
     }
@@ -44,4 +44,14 @@ export class CustomerUtils {
     tries: 0,
     ts: moment().valueOf(),
   });
+
+  public static deleteCustomerByReservationId = async (id: string) => {
+    const response = await this.collection.where('activeReservationId', '==', id).get();
+
+    if (response.size > 0) {
+      const customer = response.docs[0].data() as Customer;
+
+      await this.collection.doc(`/${customer.phone}`).delete();
+    }
+  };
 }

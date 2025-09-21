@@ -6,14 +6,19 @@ import { onValue, ref } from 'firebase/database';
 import { useEffect, useMemo, useState } from 'react';
 
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import useHttpRequest from '@/app/hooks/request';
+import { HttpUtils } from '@/app/utils/http';
 
 interface Props {
   reservation: CustomerReservation;
   lines: Line[];
+  token: string;
 }
 
 const TrackStatus = (props: Props) => {
   const [waitingList, setWaitingsList] = useState<LightReservation[] | null>([]);
+
+  const { loading, request } = useHttpRequest();
   const place = useMemo(() => (waitingList || []).findIndex((w) => w.id === props.reservation.id) + 1, [props.reservation.id, waitingList]);
 
   useEffect(() => {
@@ -40,6 +45,22 @@ const TrackStatus = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const cancelReservation = () => {
+    request({
+      request: () =>
+        HttpUtils.post(
+          '/reservations/application/cancel',
+          {},
+          {
+            headers: {
+              authorization: props.token,
+            },
+          }
+        ),
+      onDecline: () => window.alert('נכשל לבטל הזמנה'),
+    });
+  };
+
   if (!waitingList) {
     return <div>Error</div>;
   }
@@ -58,7 +79,7 @@ const TrackStatus = (props: Props) => {
       </Box>
 
       <Box sx={{ marginTop: 10, padding: '0 10%' }}>
-        <Button color='error' variant='outlined' fullWidth sx={{ borderRadius: 10 }}>
+        <Button color='error' variant='outlined' fullWidth sx={{ borderRadius: 10 }} disabled={loading} onClick={cancelReservation}>
           ביטול הזמנה
         </Button>
       </Box>

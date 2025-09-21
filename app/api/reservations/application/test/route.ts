@@ -29,7 +29,7 @@ export const POST = (request: Request) =>
     }
 
     const customer = await CustomerUtils.getCustomerByPhone(body.phone);
-    if (!customer || customer.hasActiveReservation) {
+    if (!customer || customer.activeReservationId) {
       throw ApiResponse.UnknownError();
     }
 
@@ -40,10 +40,11 @@ export const POST = (request: Request) =>
     const success = customer.otp.code === code;
 
     if (success) {
-      customer.hasActiveReservation = true;
+      const reservation = await ReservationUtils.signReservation(body);
+
+      customer.activeReservationId = reservation.id;
       customer.otp = null!;
 
-      const reservation = await ReservationUtils.signReservation(body);
       result = reservation.id;
     } else {
       customer.otp.tries++;

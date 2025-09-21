@@ -1,6 +1,6 @@
 export interface Customer {
   phone: string;
-  hasActiveReservation: boolean;
+  activeReservationId: string;
   otp: OTP;
 }
 

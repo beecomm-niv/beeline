@@ -10,6 +10,7 @@ import { REALTIME_DATABASE } from '@/app/utils/firebase-client';
 interface Props {
   reservation: CustomerReservation;
   lines: Line[];
+  token: string;
 }
 
 const Track = (props: Props) => {
@@ -36,7 +37,7 @@ const Track = (props: Props) => {
     return <div>Cancel</div>;
   }
 
-  return <TrackStatus lines={props.lines} reservation={reservation} />;
+  return <TrackStatus lines={props.lines} reservation={reservation} token={props.token} />;
 };
 
 export default Track;

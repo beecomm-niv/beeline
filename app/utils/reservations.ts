@@ -1,7 +1,8 @@
 import { v4 } from 'uuid';
 import { adminRealtimeDatabase } from '../api/database';
-import { CustomerReservation, LightReservation, Reservation, ReservationApplication } from '../models/reservation';
+import { CustomerReservation, CustomerReservationStatus, LightReservation, Reservation, ReservationApplication } from '../models/reservation';
 import { moment } from './dayjs';
+import { CustomerUtils } from './customers';
 
 export class ReservationUtils {
   private static reservationRef = adminRealtimeDatabase.ref('reservations');
@@ -41,5 +42,17 @@ export class ReservationUtils {
     const data = await this.customerReservationsRef.child('/' + branchId).get();
 
     return data.val() as Record<string, LightReservation> | null;
+  };
+
+  public static finishReservation = async (reservationId: string, branchId: string, status: CustomerReservationStatus) => {
+    await CustomerUtils.deleteCustomerByReservationId(reservationId);
+
+    const updates: Record<string, any> = {};
+
+    updates[`/reservations/${reservationId}/status`] = status;
+    updates[`/b_line/${branchId}/${reservationId}`] = null;
+    updates[`/c_line/${branchId}/${reservationId}`] = null;
+
+    await adminRealtimeDatabase.ref().update(updates);
   };
 }

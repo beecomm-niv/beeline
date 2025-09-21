@@ -59,6 +59,11 @@ const routes: Route[] = [
     pathname: '/reservations/application/test',
     useAuthGuard: false,
   },
+
+  {
+    pathname: '/reservations/application/cancel',
+    useAuthGuard: false,
+  },
 ];
 
 const apiMiddleware = async (request: NextRequest, route: string) => {

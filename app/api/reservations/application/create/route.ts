@@ -30,7 +30,7 @@ export const POST = (request: Request) =>
     }
 
     const customer = await CustomerUtils.getCustomerByPhoneWithDefaultOTP(phone);
-    if (customer.hasActiveReservation) {
+    if (customer.activeReservationId) {
       throw ApiResponse.CustomerHaveActiveReservation();
     }
 

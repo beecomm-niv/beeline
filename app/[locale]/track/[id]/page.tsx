@@ -1,5 +1,6 @@
 import Track from '@/app/components/track';
 import { BranchUtils } from '@/app/utils/branch';
+import { JwtUtils } from '@/app/utils/jwt';
 import { ReservationUtils } from '@/app/utils/reservations';
 
 interface Props {
@@ -23,7 +24,12 @@ const TrackPage = async (props: Props) => {
     return <div>Error</div>;
   }
 
-  return <Track lines={branch.lines} reservation={reservation} />;
+  const token = await JwtUtils.getToken(reservation);
+  if (!token) {
+    return <div>Error</div>;
+  }
+
+  return <Track lines={branch.lines} reservation={reservation} token={token} />;
 };
 
 export default TrackPage;
