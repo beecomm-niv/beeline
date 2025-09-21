@@ -108,14 +108,6 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
         },
       },
 
-      MuiSvgIcon: {
-        styleOverrides: {
-          root: {
-            color: palette[mode].textPrimary,
-          },
-        },
-      },
-
       MuiDrawer: {
         styleOverrides: {
           paper: {

@@ -1,7 +1,7 @@
-import ReservationList from '@/app/components/reservations-list';
+import Home from '@/app/components/home';
 
 const ManagementPage = () => {
-  return <ReservationList />;
+  return <Home />;
 };
 
 export default ManagementPage;
