@@ -141,6 +141,7 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
         styleOverrides: {
           root: {
             borderRadius: 10,
+            backgroundColor: palette[mode].papper,
             '&.Mui-selected': {
               backgroundColor: '#272626',
               '&:hover': {
@@ -176,6 +177,14 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
         styleOverrides: {
           icon: {
             left: '0 !important',
+          },
+        },
+      },
+
+      MuiCard: {
+        styleOverrides: {
+          root: {
+            background: palette[mode].papper,
           },
         },
       },

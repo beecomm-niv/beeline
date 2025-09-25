@@ -31,10 +31,10 @@ export default async function ManagementLayout({ children }: { children: React.R
     <div>
       <ManagementProvider user={user} branch={branch}>
         <div style={{ width: '100%', display: 'flex', height: '100svh' }}>
-          <div style={{ width: '25%' }}>
+          <div style={{ width: '20%' }}>
             <Drawer branchName={branch.name} />
           </div>
-          <div style={{ width: '75%' }}>
+          <div style={{ width: '80%' }}>
             <ReservationsHandler branchId={branch.id}>{children}</ReservationsHandler>
           </div>
         </div>
