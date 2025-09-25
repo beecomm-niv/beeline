@@ -29,8 +29,12 @@ export default async function ManagementLayout({ children }: { children: React.R
   return (
     <div>
       <ManagementProvider user={user} branch={branch}>
-        <Drawer />
-        {children}
+        <div style={{ width: '100%', display: 'flex', height: '100svh' }}>
+          <div style={{ width: '25%' }}>
+            <Drawer branchName={branch.name} />
+          </div>
+          <div style={{ width: '75%' }}>{children}</div>
+        </div>
       </ManagementProvider>
     </div>
   );

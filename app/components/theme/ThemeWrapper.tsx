@@ -15,6 +15,7 @@ interface Pallete {
   outlinedBackground: string;
   papper: string;
   textSecondery: string;
+  placeholder: string;
 }
 
 const hebImplment = (lang: Locale, classValue: string) => (lang === 'he' ? classValue : '');
@@ -28,6 +29,7 @@ const palette: Record<'light' | 'dark', Pallete> = {
     outlinedBackground: '#bbbbbbff',
     papper: '#1E1E1E',
     palleteSecondery: '#edc210',
+    placeholder: '#A1A1A1',
   },
   light: {
     palettePrimary: '#edc210',
@@ -37,6 +39,7 @@ const palette: Record<'light' | 'dark', Pallete> = {
     papper: '#d4d4d4',
     palleteSecondery: '#edc210',
     textSecondery: 'gray',
+    placeholder: '#A1A1A1',
   },
 };
 
@@ -65,11 +68,11 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
       MuiInputLabel: {
         styleOverrides: {
           root: {
-            color: `#A1A1A1 !important`,
+            color: `${palette[mode].placeholder} !important`,
           },
           shrink: {
             transform: hebImplment(lang, 'translate(-14px, 2px) scale(0.75) !important'),
-            color: `#A1A1A1 !important`,
+            color: `${palette[mode].placeholder} !important`,
           },
         },
       },
@@ -130,6 +133,20 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
           root: {
             borderColor: palette[mode].papper,
             width: '100%',
+          },
+        },
+      },
+
+      MuiListItemButton: {
+        styleOverrides: {
+          root: {
+            borderRadius: 10,
+            '&.Mui-selected': {
+              backgroundColor: '#272626',
+              '&:hover': {
+                backgroundColor: '#272626',
+              },
+            },
           },
         },
       },
