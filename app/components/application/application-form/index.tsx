@@ -1,7 +1,9 @@
+'use client';
+
 import { Branch } from '@/app/models/branch';
 import { ReservationApplication } from '@/app/models/reservation';
 import { StorageUtils } from '@/app/utils/storage';
-import { Box, Button, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Box, Button, Divider, MenuItem, Select, TextField, Typography } from '@mui/material';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
@@ -83,6 +85,7 @@ const ApplicationForm = (props: Props) => {
         </Box>
 
         <TextField label='טלפון' value={phone} onChange={(e) => setPhone(e.target.value)} />
+        <Divider>כמה סועדים ?</Divider>
         <Select fullWidth value={selectedDinners} onChange={(e) => setSelectedDinners(e.target.value)}>
           {dinners.current.map((d) => (
             <MenuItem key={d} value={d}>

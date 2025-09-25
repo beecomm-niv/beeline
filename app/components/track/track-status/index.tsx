@@ -1,3 +1,5 @@
+'use client';
+
 import { Line } from '@/app/models/branch';
 import { CustomerReservation, LightReservation } from '@/app/models/reservation';
 import { REALTIME_DATABASE } from '@/app/utils/firebase-client';
@@ -80,7 +82,7 @@ const TrackStatus = (props: Props) => {
       </Card>
 
       <Button variant='contained' color='error' fullWidth sx={{ marginTop: 4, borderRadius: '10px' }} onClick={cancelReservation} disabled={loading}>
-        ביטל הזמנה
+        ביטול הרשמה
       </Button>
     </Box>
   );
