@@ -1,11 +1,10 @@
 import { Line } from '@/app/models/branch';
 import { CustomerReservation, LightReservation } from '@/app/models/reservation';
 import { REALTIME_DATABASE } from '@/app/utils/firebase-client';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Typography } from '@mui/material';
 import { onValue, ref } from 'firebase/database';
 import { useEffect, useMemo, useState } from 'react';
 
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import useHttpRequest from '@/app/hooks/request';
 import { HttpUtils } from '@/app/utils/http';
 
@@ -66,23 +65,23 @@ const TrackStatus = (props: Props) => {
   }
 
   return (
-    <Box sx={{ textAlign: 'center', paddingTop: 10 }}>
-      <CheckCircleOutlineIcon sx={{ fontSize: 50 }} />
+    <Box sx={{ display: 'flex', height: '100svh', width: '100%', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: 2, padding: '0 20px' }}>
+      <Typography variant='h4'>אתם ברשימת ההמתנה !</Typography>
 
-      <Typography variant='h5' fontWeight='bold'>
-        תודה רבה על ההמתנה !
+      <Typography sx={{ marginTop: 2, marginBottom: -1 }} color='text.secondary'>
+        מיקומכם בתור הוא
       </Typography>
+      <Card sx={{ width: '175px', height: '175px', borderRadius: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <CardContent>
+          <Typography color='primary' variant='h2'>
+            {place}
+          </Typography>
+        </CardContent>
+      </Card>
 
-      <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: -2, marginTop: 10 }}>
-        <Typography color='text.secondary'>מקומך בתור הוא</Typography>
-        <Typography variant='h4'>{place || ''}</Typography>
-      </Box>
-
-      <Box sx={{ marginTop: 10, padding: '0 10%' }}>
-        <Button color='error' variant='outlined' fullWidth sx={{ borderRadius: 10 }} disabled={loading} onClick={cancelReservation}>
-          ביטול הזמנה
-        </Button>
-      </Box>
+      <Button variant='contained' color='error' fullWidth sx={{ marginTop: 4, borderRadius: '10px' }} onClick={cancelReservation} disabled={loading}>
+        ביטל הזמנה
+      </Button>
     </Box>
   );
 };
