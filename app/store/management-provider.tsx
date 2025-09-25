@@ -11,6 +11,11 @@ const createManagementStore = (initStore: InitManagementStore) =>
 
     user: initStore.user,
     setUser: (user) => set({ user }),
+
+    reservations: [],
+    setReservations: (reservations) => set({ reservations, isReservationsFetched: true }),
+
+    isReservationsFetched: false,
   }));
 
 const ManagementContext = createContext<StoreApi<ManagementStore>>(undefined!);
