@@ -1,7 +1,8 @@
 import { Branch } from '@/app/models/branch';
 import { ReservationApplication } from '@/app/models/reservation';
 import { StorageUtils } from '@/app/utils/storage';
-import { Box, Button, Divider, MenuItem, Select, TextField } from '@mui/material';
+import { Box, Button, MenuItem, Select, TextField, Typography } from '@mui/material';
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
 interface CacheUser {
@@ -49,50 +50,48 @@ const ApplicationForm = (props: Props) => {
 
     props.onSendOTP({
       branchId: undefined!,
-      dinners: selectedDinners,
+      dinners: +selectedDinners,
       fullName: `${name} ${surName}`,
       phone,
     });
   };
 
   return (
-    <Box
-      sx={{
-        height: '100svh',
-        display: 'flex',
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        gap: 2,
-        padding: '0 10px',
-        position: 'relative',
-      }}
-    >
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          gap: 2,
-        }}
-      >
-        <TextField label='שם פרטי' value={name} onChange={(e) => setName(e.target.value)} />
-        <TextField label='שם משפחה' value={surName} onChange={(e) => setSurName(e.target.value)} />
+    <Box sx={{ padding: '0 5%' }}>
+      <Box sx={{ width: '100%', textAlign: 'center', position: 'relative' }}>
+        <Box sx={{ position: 'absolute', height: '100%', width: '100%', zIndex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Typography variant='h4'>{props.branch.name}</Typography>
+        </Box>
+        <Image
+          alt=''
+          src='https://tse2.mm.bing.net/th/id/OIP._Z0QaUb0GjS1y3q_imRjOQHaE0?w=474&h=474&c=7&p=0'
+          width={300}
+          height={300}
+          style={{ borderRadius: '0 0 10px 10px', filter: 'brightness(50%)' }}
+          priority
+        />
       </Box>
 
-      <TextField label='טלפון' fullWidth value={phone} onChange={(e) => setPhone(e.target.value)} />
+      <Box sx={{ width: '100%', marginTop: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+        <Typography variant='h5' textAlign='center'>
+          הצטרף לרשימת ההמתנה
+        </Typography>
 
-      <Divider>כמה סועדים ?</Divider>
-      <Select fullWidth value={selectedDinners} onChange={(e) => setSelectedDinners(e.target.value)}>
-        {dinners.current.map((d) => (
-          <MenuItem key={d} value={d}>
-            {d}
-          </MenuItem>
-        ))}
-      </Select>
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, marginTop: 1 }}>
+          <TextField label='שם פרטי' value={name} onChange={(e) => setName(e.target.value)} />
+          <TextField label='שם משפחה' value={surName} onChange={(e) => setSurName(e.target.value)} />
+        </Box>
 
-      <Box sx={{ position: 'absolute', bottom: 0, padding: 2, width: '100%' }}>
-        <Button onClick={onSubmit} variant='contained' fullWidth disabled={props.isLoading}>
+        <TextField label='טלפון' value={phone} onChange={(e) => setPhone(e.target.value)} />
+        <Select fullWidth value={selectedDinners} onChange={(e) => setSelectedDinners(e.target.value)}>
+          {dinners.current.map((d) => (
+            <MenuItem key={d} value={d}>
+              {d}
+            </MenuItem>
+          ))}
+        </Select>
+
+        <Button variant='contained' sx={{ borderRadius: '10px', marginTop: 2 }} onClick={onSubmit} disabled={props.isLoading}>
           הרשמה
         </Button>
       </Box>

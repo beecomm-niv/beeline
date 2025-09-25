@@ -21,12 +21,12 @@ const hebImplment = (lang: Locale, classValue: string) => (lang === 'he' ? class
 
 const palette: Record<'light' | 'dark', Pallete> = {
   dark: {
-    palettePrimary: '#edc210',
+    palettePrimary: '#1aae6a',
     textPrimary: '#ffffff',
     textSecondery: '#c9c9c9ff',
-    defaultBackground: '#000000',
+    defaultBackground: '#121212',
     outlinedBackground: '#bbbbbbff',
-    papper: '#212121',
+    papper: '#1E1E1E',
     palleteSecondery: '#edc210',
   },
   light: {
@@ -65,11 +65,11 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
       MuiInputLabel: {
         styleOverrides: {
           root: {
-            color: `${palette[mode].textPrimary} !important`,
+            color: `#A1A1A1 !important`,
           },
           shrink: {
             transform: hebImplment(lang, 'translate(-14px, 2px) scale(0.75) !important'),
-            color: `${palette[mode].palettePrimary} !important`,
+            color: `#A1A1A1 !important`,
           },
         },
       },
@@ -138,6 +138,27 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
         styleOverrides: {
           track: {
             backgroundColor: palette[mode].textPrimary,
+          },
+        },
+      },
+
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            color: palette[mode].textPrimary,
+            fontSize: 18,
+          },
+        },
+
+        defaultProps: {
+          variant: 'contained',
+        },
+      },
+
+      MuiSelect: {
+        styleOverrides: {
+          icon: {
+            left: '0 !important',
           },
         },
       },

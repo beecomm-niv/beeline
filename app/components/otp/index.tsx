@@ -3,6 +3,8 @@
 import { Box, Button, styled, TextField, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 
+import LockIcon from '@mui/icons-material/Lock';
+
 const TIMEOUT_LENGTH = 59;
 
 interface Props {
@@ -59,66 +61,54 @@ export const OTP = (props: Props) => {
   }, []);
 
   const onResend = () => {
-    props.onResend();
-    onSetTimer();
+    if (!props.isLoading) {
+      props.onResend();
+      onSetTimer();
+    }
   };
 
   const onSubmit = () => {
-    props.onSubmit(code.join(''));
+    if (!props.isLoading) {
+      props.onSubmit(code.join(''));
+    }
   };
 
   return (
-    <Box
-      sx={{
-        height: '100svh',
-        display: 'flex',
-        alignItems: 'center',
-        width: '100%',
-        flexDirection: 'column',
-        position: 'relative',
-        paddingTop: 10,
-      }}
-    >
-      <Typography variant='h4'>אימות טלפון</Typography>
-
-      <Typography color='text.secondary' fontSize={18}>
-        נשלח קוד אימות למספר {props.phone}
+    <Box sx={{ display: 'flex', height: '100svh', width: '100%', alignItems: 'center', flexDirection: 'column', padding: '0 5%', gap: 3, marginTop: '20%' }}>
+      <LockIcon color='primary' sx={{ fontSize: 70 }} />
+      <Typography variant='h6' textAlign='center'>
+        אנא הכנס את קוד האימות שנשלח אלייך בהודעת SMS
       </Typography>
 
-      <Box sx={{ display: 'flex', gap: 2, marginTop: 5, direction: 'ltr' }}>
+      <Box sx={{ display: 'flex', gap: 2, direction: 'ltr' }}>
         <Input inputRef={ref1} value={code[0]} onChange={(e) => onChange(e.target.value, 0, ref1.current, ref2.current, null)} />
         <Input inputRef={ref2} value={code[1]} onChange={(e) => onChange(e.target.value, 1, ref2.current, ref3.current, ref1.current)} />
         <Input inputRef={ref3} value={code[2]} onChange={(e) => onChange(e.target.value, 2, ref3.current, ref4.current, ref2.current)} />
         <Input inputRef={ref4} value={code[3]} onChange={(e) => onChange(e.target.value, 3, ref4.current, null, ref3.current)} />
       </Box>
 
-      <Box sx={{ marginTop: 2 }}>
-        {timer > 0 && <Typography>לא קיבלתם קוד ? נשלח שוב בעוד 0:{timer.toString().padStart(2, '0')}</Typography>}
-        {timer === 0 && (
-          <Button onClick={onResend} disabled={props.isLoading} variant='outlined'>
-            שלח שוב
-          </Button>
-        )}
-      </Box>
+      <Button variant='contained' fullWidth sx={{ borderRadius: '10px', marginTop: 2 }} onClick={onSubmit} disabled={props.isLoading}>
+        שליחה
+      </Button>
 
-      <Box sx={{ position: 'fixed', bottom: 0, width: '100%', padding: 2 }}>
-        <Button fullWidth variant='contained' onClick={onSubmit} disabled={props.isLoading}>
-          שליחה
-        </Button>
-      </Box>
+      {timer > 0 ? (
+        <Typography color='text.secondary'>לא קיבלתם קוד ? נשלח שוב בעוד 0:{timer.toString().padStart(2, '0')}</Typography>
+      ) : (
+        <Typography onClick={onResend} color='primary'>
+          שלח שוב
+        </Typography>
+      )}
     </Box>
   );
 };
 
 const Input = styled(TextField)({
   '& .MuiInputBase-root': {
-    borderRadius: '100%',
     paddingTop: 0,
   },
   '& .MuiInputBase-input': {
     height: 30,
     width: 40,
-    borderRadius: '100%',
     textAlign: 'center',
     fontSize: 25,
   },

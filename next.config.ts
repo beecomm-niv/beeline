@@ -5,6 +5,10 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+
+  images: {
+    domains: ['tse2.mm.bing.net'],
+  },
 };
 
 export default nextConfig;
