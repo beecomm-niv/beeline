@@ -7,6 +7,7 @@ export interface Translate {
 
   drawerLineSettingsLabel: string;
   drawerHomeLabel: string;
+  drawerSettingsLabel: string;
 }
 
 export const translate: Record<Locale, Translate> = {
@@ -16,6 +17,7 @@ export const translate: Record<Locale, Translate> = {
     loginSubmitButton: 'login',
     drawerLineSettingsLabel: 'Lines Settings',
     drawerHomeLabel: 'orders',
+    drawerSettingsLabel: 'settings',
   },
   he: {
     loginEmailLabel: 'מייל',
@@ -23,5 +25,6 @@ export const translate: Record<Locale, Translate> = {
     loginSubmitButton: 'התחברות',
     drawerLineSettingsLabel: 'ניהול תור',
     drawerHomeLabel: 'הזמנות',
+    drawerSettingsLabel: 'הגדרות',
   },
 };

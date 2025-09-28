@@ -55,7 +55,7 @@ const LineManager = () => {
   };
 
   return (
-    <Box sx={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <Typography variant='h5'>ניהול תורים</Typography>
 
       {lines.map((l) => (
@@ -90,8 +90,10 @@ const LineManager = () => {
       </Card>
 
       {lines.length > 0 && (
-        <Button variant='contained' fullWidth sx={{ marginTop: 4 }} onClick={onSave} disabled={loading}>
-          שמירה
+        <Button variant='outlined' fullWidth sx={{ marginTop: 2 }} onClick={onSave} disabled={loading}>
+          <Typography fontSize={20} color='primary'>
+            שמירה
+          </Typography>
         </Button>
       )}
     </Box>

@@ -22,7 +22,7 @@ const Home = () => {
   }
 
   return (
-    <Box sx={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <Typography variant='h5'>הזמנות</Typography>
       <ReservationsFilter />
       <ReservationsList reservations={reservations} />

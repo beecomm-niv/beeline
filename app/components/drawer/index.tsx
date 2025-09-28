@@ -5,6 +5,7 @@ import { ReactElement } from 'react';
 
 import PlaylistAddCheckOutlinedIcon from '@mui/icons-material/PlaylistAddCheckOutlined';
 import RecentActorsOutlinedIcon from '@mui/icons-material/RecentActorsOutlined';
+import Settings from '@mui/icons-material/SettingsOutlined';
 
 import { useAppStore } from '@/app/store/appStore-provider';
 import { Translate } from '@/app/utils/translate';
@@ -26,6 +27,11 @@ const routes: RouteItem[] = [
     path: 'management/line-settings',
     icon: <PlaylistAddCheckOutlinedIcon />,
     title: 'drawerLineSettingsLabel',
+  },
+  {
+    path: 'management/settings',
+    icon: <Settings />,
+    title: 'drawerSettingsLabel',
   },
 ];
 
