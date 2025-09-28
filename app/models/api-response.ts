@@ -70,4 +70,8 @@ export class ApiResponse<T> {
   public static SmsMessageError(message: string): ApiResponse<null> {
     return this.failure(message, 1009);
   }
+
+  public static FailedToUploadImage(): ApiResponse<null> {
+    return this.failure('Failed to upload image', 1010);
+  }
 }

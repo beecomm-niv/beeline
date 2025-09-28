@@ -51,6 +51,12 @@ const routes: Route[] = [
   },
 
   {
+    pathname: '/branches/image',
+    useAuthGuard: true,
+    role: 'user',
+  },
+
+  {
     pathname: '/reservations/application/create',
     useAuthGuard: false,
   },

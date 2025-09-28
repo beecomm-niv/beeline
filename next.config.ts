@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
   },
 
   images: {
-    domains: ['tse2.mm.bing.net'],
+    domains: ['imageproxy.web.delivery'],
   },
 };
 

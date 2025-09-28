@@ -1,6 +1,7 @@
 export interface Branch {
   id: string;
   name: string;
+  image?: string;
 
   lines?: Line[];
 }
