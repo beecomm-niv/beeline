@@ -17,7 +17,7 @@ const ReservationsList = (props: Props) => {
   const align = useMemo(() => (lang === 'he' ? 'right' : 'left'), [lang]);
 
   return (
-    <TableContainer sx={{ padding: '10px 20px' }}>
+    <TableContainer>
       <Table>
         <TableHead>
           <TableRow>

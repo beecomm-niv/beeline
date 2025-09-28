@@ -2,7 +2,7 @@
 
 import useBranchAction from '@/app/hooks/useBranchUpdate';
 import { Line } from '@/app/models/branch';
-import { Box, Button, Chip, styled, Switch, Typography } from '@mui/material';
+import { Box, Button, Card, Chip, Divider, ListItemButton, Switch, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 
@@ -55,53 +55,47 @@ const LineManager = () => {
   };
 
   return (
-    <Box sx={{ textAlign: 'center', marginTop: 5, padding: '0 10px' }}>
-      <ButtonsContainer>
-        <Button variant='contained' onClick={onAddLine} disabled={loading}>
-          הוסף תור +
-        </Button>
-
-        <Button variant='contained' color='primary' disabled={loading} onClick={onSave}>
-          שמירה
-        </Button>
-      </ButtonsContainer>
-
-      {lines.length === 0 && (
-        <Typography marginTop={2} variant='h6'>
-          אין תורים 😞
-        </Typography>
-      )}
+    <Box sx={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <Typography variant='h5'>ניהול תורים</Typography>
 
       {lines.map((l) => (
-        <LineItem key={l.id}>
-          <Switch value={l.active} checked={l.active} onChange={(e) => onLineChange(l.id, 'active', e.target.checked)} />
+        <Card key={l.id} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '30px', borderRadius: '20px' }}>
+          <Box>
+            <Switch value={l.active} checked={l.active} onChange={(e) => onLineChange(l.id, 'active', e.target.checked)} />
+          </Box>
+
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Typography fontSize={15}>סועדים</Typography>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((d) => (
               <Chip key={d} label={d} color='primary' variant={l.dinnersRange.some((l) => l === d) ? 'filled' : 'outlined'} onClick={() => onDinnersRangeChange(l, d)} />
             ))}
           </Box>
-          <Button color='error' variant='outlined' sx={{ borderRadius: 10 }} onClick={() => onDelete(l.id)}>
-            מחיקה
-          </Button>
-        </LineItem>
+
+          <Box>
+            <ListItemButton onClick={() => onDelete(l.id)} selected>
+              <Typography fontSize={16} color='error'>
+                מחיקה
+              </Typography>
+            </ListItemButton>
+          </Box>
+        </Card>
       ))}
+
+      <Divider />
+
+      <Card sx={{ height: 75, borderRadius: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px dotted #383838' }} onClick={onAddLine}>
+        <Typography color='primary' variant='h5'>
+          תור חדש +
+        </Typography>
+      </Card>
+
+      {lines.length > 0 && (
+        <Button variant='contained' fullWidth sx={{ marginTop: 4 }} onClick={onSave} disabled={loading}>
+          שמירה
+        </Button>
+      )}
     </Box>
   );
 };
-
-const ButtonsContainer = styled('div')({
-  display: 'flex',
-  gap: 5,
-  justifyContent: 'space-between',
-});
-
-const LineItem = styled('div')((theme) => ({
-  borderBottom: '1px solid ' + theme.theme.palette.text.secondary,
-  padding: '20px 0',
-  display: 'flex',
-  justifyContent: 'space-between',
-  marginTop: 30,
-}));
 
 export default LineManager;
