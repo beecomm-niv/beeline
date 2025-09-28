@@ -4,6 +4,7 @@ import { Reservation } from '@/app/models/reservation';
 import { useManagementStore } from '@/app/store/management-provider';
 import { useEffect, useState } from 'react';
 import ReservationsList from './reservations-list';
+import ReservationsFilter from './reservations-filter';
 
 const Home = () => {
   const storeReservations = useManagementStore((s) => s.reservations);
@@ -19,7 +20,12 @@ const Home = () => {
     return <div>Loading...</div>;
   }
 
-  return <ReservationsList reservations={reservations} />;
+  return (
+    <>
+      <ReservationsFilter />
+      <ReservationsList reservations={reservations} />
+    </>
+  );
 };
 
 export default Home;

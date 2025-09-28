@@ -4,7 +4,7 @@ import { Card, List, ListItem, ListItemButton, ListItemIcon, Typography } from '
 import { ReactElement } from 'react';
 
 import PlaylistAddCheckOutlinedIcon from '@mui/icons-material/PlaylistAddCheckOutlined';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import RecentActorsOutlinedIcon from '@mui/icons-material/RecentActorsOutlined';
 
 import { useAppStore } from '@/app/store/appStore-provider';
 import { Translate } from '@/app/utils/translate';
@@ -19,7 +19,7 @@ interface RouteItem {
 const routes: RouteItem[] = [
   {
     path: 'management',
-    icon: <HomeOutlinedIcon />,
+    icon: <RecentActorsOutlinedIcon />,
     title: 'drawerHomeLabel',
   },
   {
@@ -52,7 +52,7 @@ const Drawer = (props: Props) => {
       <List>
         {routes.map((r) => (
           <ListItem key={r.path}>
-            <ListItemButton onClick={() => onRoute(r.path)} selected={`/${r.path}` === path}>
+            <ListItemButton onClick={() => onRoute(r.path)} selected={`/${r.path}` === path} sx={{ padding: '15px 10px' }}>
               <ListItemIcon>{r.icon}</ListItemIcon>
               <Typography>{translate[r.title]}</Typography>
             </ListItemButton>

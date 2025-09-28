@@ -15,13 +15,13 @@ export const translate: Record<Locale, Translate> = {
     loginPasswordLabel: 'password',
     loginSubmitButton: 'login',
     drawerLineSettingsLabel: 'Lines Settings',
-    drawerHomeLabel: 'home',
+    drawerHomeLabel: 'orders',
   },
   he: {
     loginEmailLabel: 'מייל',
     loginPasswordLabel: 'סיסמא',
     loginSubmitButton: 'התחברות',
     drawerLineSettingsLabel: 'ניהול תור',
-    drawerHomeLabel: 'בית',
+    drawerHomeLabel: 'הזמנות',
   },
 };

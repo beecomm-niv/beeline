@@ -148,6 +148,9 @@ const getTheme = (mode: 'light' | 'dark', lang: Locale) =>
                 backgroundColor: '#272626',
               },
             },
+            '&:hover': {
+              backgroundColor: '#272626',
+            },
           },
         },
       },
