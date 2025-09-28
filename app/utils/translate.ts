@@ -23,7 +23,7 @@ export const translate: Record<Locale, Translate> = {
     loginEmailLabel: 'מייל',
     loginPasswordLabel: 'סיסמא',
     loginSubmitButton: 'התחברות',
-    drawerLineSettingsLabel: 'ניהול תור',
+    drawerLineSettingsLabel: 'הגדרות תורים',
     drawerHomeLabel: 'הזמנות',
     drawerSettingsLabel: 'הגדרות',
   },

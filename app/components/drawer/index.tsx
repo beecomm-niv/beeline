@@ -10,6 +10,7 @@ import Settings from '@mui/icons-material/SettingsOutlined';
 import { useAppStore } from '@/app/store/appStore-provider';
 import { Translate } from '@/app/utils/translate';
 import { usePathname, useRouter } from 'next/navigation';
+import { useManagementStore } from '@/app/store/management-provider';
 
 interface RouteItem {
   path: string;
@@ -35,16 +36,14 @@ const routes: RouteItem[] = [
   },
 ];
 
-interface Props {
-  branchName: string;
-}
-
-const Drawer = (props: Props) => {
+const Drawer = () => {
   const prefix = useAppStore((s) => s.urlPrefix);
   const translate = useAppStore((s) => s.translate);
 
   const router = useRouter();
   const path = usePathname();
+
+  const branch = useManagementStore((s) => s.branch);
 
   const onRoute = (path: string) => {
     router.push(prefix + path);
@@ -53,7 +52,7 @@ const Drawer = (props: Props) => {
   return (
     <Card sx={{ height: '100%' }}>
       <Typography variant='h6' sx={{ padding: '20px 16px 10px 16px' }}>
-        {props.branchName}
+        {branch.name}
       </Typography>
       <List>
         {routes.map((r) => (

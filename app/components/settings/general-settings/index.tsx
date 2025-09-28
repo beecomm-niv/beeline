@@ -68,7 +68,9 @@ const GeneralSettings = () => {
           <Typography>שם מסעדה</Typography>
           <TextField value={editBranch.name} onChange={(e) => onChange('name', e.target.value)} />
         </Box>
+
         <Divider />
+
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography>תמונה</Typography>
           {!editBranch.image && !preshow && (
