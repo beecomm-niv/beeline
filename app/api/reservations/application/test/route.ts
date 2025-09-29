@@ -3,15 +3,12 @@ import { ReservationApplication } from '@/app/models/reservation';
 import { CustomerUtils } from '@/app/utils/customers';
 import errorHandler from '@/app/utils/error-handler';
 import { JwtUtils } from '@/app/utils/jwt';
+import { OtpUtils } from '@/app/utils/otp';
 import { ReservationUtils } from '@/app/utils/reservations';
 import { NextResponse } from 'next/server';
 
-const TRIES_TRESHOLD = 5;
-
 export const POST = (request: Request) =>
   errorHandler<string>(async () => {
-    let result = '';
-
     const accessToken = request.headers.get('access_token');
     if (!accessToken) {
       throw ApiResponse.UnknownError();
@@ -29,31 +26,15 @@ export const POST = (request: Request) =>
     }
 
     const customer = await CustomerUtils.getCustomerByPhone(body.phone);
-    if (!customer || customer.activeReservationId) {
+    if (customer?.activeReservationId) {
       throw ApiResponse.UnknownError();
     }
 
-    if (customer.otp.tries >= TRIES_TRESHOLD) {
-      throw ApiResponse.TooManyTries();
-    }
+    await OtpUtils.tryMatchOTP(body.phone, code);
 
-    const success = customer.otp.code === code;
+    const reservation = await ReservationUtils.signReservation(body);
 
-    if (success) {
-      const reservation = await ReservationUtils.signReservation(body);
+    await CustomerUtils.updateCustomer({ phone: body.phone, activeReservationId: reservation.id });
 
-      customer.activeReservationId = reservation.id;
-      customer.otp = null!;
-
-      result = reservation.id;
-    } else {
-      customer.otp.tries++;
-    }
-
-    await CustomerUtils.updateCustomer(customer);
-    if (!success) {
-      throw ApiResponse.UnmatchedCode();
-    }
-
-    return NextResponse.json(ApiResponse.success(result));
+    return NextResponse.json(ApiResponse.success(reservation.id));
   });

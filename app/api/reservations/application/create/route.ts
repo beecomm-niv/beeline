@@ -1,12 +1,10 @@
 import { ApiResponse } from '@/app/models/api-response';
 import { ReservationApplication } from '@/app/models/reservation';
 import { CustomerUtils } from '@/app/utils/customers';
-import { moment } from '@/app/utils/dayjs';
 import errorHandler from '@/app/utils/error-handler';
 import { JwtUtils } from '@/app/utils/jwt';
+import { OtpUtils } from '@/app/utils/otp';
 import { NextResponse } from 'next/server';
-
-const COUNT_TRESHOLD = 5;
 
 export const POST = (request: Request) =>
   errorHandler<string>(async () => {
@@ -29,28 +27,13 @@ export const POST = (request: Request) =>
       throw ApiResponse.InvalidBody();
     }
 
-    const customer = await CustomerUtils.getCustomerByPhoneWithDefaultOTP(phone);
-    if (customer.activeReservationId) {
+    const customer = await CustomerUtils.getCustomerByPhone(phone);
+    if (customer?.activeReservationId) {
       throw ApiResponse.CustomerHaveActiveReservation();
     }
 
-    const isOtpActive = moment(customer.otp.ts).diff(moment(), 'hours') < 5;
+    await OtpUtils.trySendOTP(phone);
 
-    if (isOtpActive) {
-      if (customer.otp.count >= COUNT_TRESHOLD) {
-        throw ApiResponse.TooManyTries();
-      }
-
-      customer.otp.code = CustomerUtils.getNewCode();
-    } else {
-      customer.otp = CustomerUtils.createOtp();
-    }
-
-    // await SmsUtils.sendMessage(body.branchId, phone, customer.otp.code);
-
-    customer.otp.count++;
-
-    await CustomerUtils.updateCustomer(customer);
     const token = await JwtUtils.getToken(body, '5m');
 
     if (!token) {
