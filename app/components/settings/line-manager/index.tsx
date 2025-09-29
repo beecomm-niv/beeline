@@ -3,12 +3,15 @@
 import useBranchAction from '@/app/hooks/useBranchUpdate';
 import { Line } from '@/app/models/branch';
 import { Box, Button, Card, Chip, Divider, ListItemButton, Switch, Typography } from '@mui/material';
+import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 
 const LineManager = () => {
   const { branch, loading, saveBranch } = useBranchAction();
   const [lines, setLines] = useState<Line[]>(branch.lines || []);
+
+  const snackbar = useSnackbar();
 
   useEffect(() => {
     setLines(branch.lines || []);
@@ -44,7 +47,7 @@ const LineManager = () => {
     for (const line of lines) {
       for (const range of line.dinnersRange) {
         if (set.has(range)) {
-          return window.alert('פעולה לא חוקית. יש תורים שונים שמכילים את אותם מספר סועדים');
+          return snackbar.enqueueSnackbar('פעולה לא חוקית. יש תורים שונים שמכילים את אותם מספר סועדים', { variant: 'error' });
         }
 
         set.add(range);

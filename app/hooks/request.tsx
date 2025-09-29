@@ -1,5 +1,8 @@
+'use client';
+
 import { useCallback, useState } from 'react';
 import { ApiResponse } from '../models/api-response';
+import { useSnackbar } from 'notistack';
 
 interface Props<T> {
   request: () => Promise<ApiResponse<T>>;
@@ -10,6 +13,8 @@ interface Props<T> {
 const useHttpRequest = () => {
   const [loading, setLoading] = useState(false);
 
+  const snackbar = useSnackbar();
+
   const request = useCallback(async <T,>(params: Props<T>, alertOnError: boolean = true) => {
     setLoading(true);
 
@@ -19,7 +24,7 @@ const useHttpRequest = () => {
 
     if (response.hasError) {
       if (alertOnError) {
-        window.alert(response.errorMessage);
+        snackbar.enqueueSnackbar(response.errorMessage, { variant: 'error' });
       }
 
       if (params.onDecline) {

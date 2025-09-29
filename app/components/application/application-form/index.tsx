@@ -5,6 +5,7 @@ import { ReservationApplication } from '@/app/models/reservation';
 import { StorageUtils } from '@/app/utils/storage';
 import { Box, Button, Divider, MenuItem, Select, TextField, Typography } from '@mui/material';
 import Image from 'next/image';
+import { useSnackbar } from 'notistack';
 import { useEffect, useRef, useState } from 'react';
 
 interface CacheUser {
@@ -21,6 +22,7 @@ interface Props {
 
 const ApplicationForm = (props: Props) => {
   const dinners = useRef<number[]>((props.branch.lines || []).reduce<number[]>((prev, line) => prev.concat(line.dinnersRange), []));
+  const snackbar = useSnackbar();
 
   const [name, setName] = useState('');
   const [surName, setSurName] = useState('');
@@ -39,7 +41,7 @@ const ApplicationForm = (props: Props) => {
 
   const onSubmit = async () => {
     if (!name || !surName || !phone || !selectedDinners) {
-      return window.alert('כל השדות חובה');
+      return snackbar.enqueueSnackbar('כל השדות חובה', { variant: 'error' });
     }
 
     const storageValue: CacheUser = {

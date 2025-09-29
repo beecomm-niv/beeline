@@ -6,6 +6,7 @@ import { HttpUtils } from '@/app/utils/http';
 import { Button, styled, TextField } from '@mui/material';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
+import { useSnackbar } from 'notistack';
 
 import React from 'react';
 
@@ -16,15 +17,16 @@ const LoginWithMailAndPassword = () => {
   const router = useRouter();
   const translate = useAppStore((s) => s.translate);
   const prefix = useAppStore((s) => s.urlPrefix);
+  const snackbar = useSnackbar();
 
   const onSubmit = async () => {
     if (!email || !password) {
-      return window.alert('Email and Password are required !');
+      return snackbar.enqueueSnackbar('כל השדות חובה', { variant: 'error' });
     }
 
     const response = await HttpUtils.post<boolean>('/users/login', { email, password });
     if (response.hasError) {
-      return window.alert('Email or Password are not associated with any user');
+      return snackbar.enqueueSnackbar('שם משתמש או סיסמא לא תקינים', { variant: 'error' });
     }
 
     await signInWithEmailAndPassword(AUTH, email, password);

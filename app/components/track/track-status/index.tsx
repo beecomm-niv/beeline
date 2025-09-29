@@ -9,6 +9,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import useHttpRequest from '@/app/hooks/request';
 import { HttpUtils } from '@/app/utils/http';
+import { useSnackbar } from 'notistack';
 
 interface Props {
   reservation: CustomerReservation;
@@ -21,6 +22,7 @@ const TrackStatus = (props: Props) => {
 
   const { loading, request } = useHttpRequest();
   const place = useMemo(() => (waitingList || []).findIndex((w) => w.id === props.reservation.id) + 1, [props.reservation.id, waitingList]);
+  const snackbar = useSnackbar();
 
   useEffect(() => {
     const dinnersToLineId: Record<number, string> = {};
@@ -58,7 +60,7 @@ const TrackStatus = (props: Props) => {
             },
           }
         ),
-      onDecline: () => window.alert('נכשל לבטל הזמנה'),
+      onDecline: () => snackbar.enqueueSnackbar('נכשל לבטל הזמנה', { variant: 'error' }),
     });
   };
 
