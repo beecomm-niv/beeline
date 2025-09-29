@@ -13,7 +13,7 @@ export const GET = async () =>
     const token = c.get('sessionId')?.value || '';
 
     if (!token) {
-      throw ApiResponse.TokenIsMissing();
+      throw ApiResponse.Unauthorized();
     }
 
     const jwtBody = await JwtUtils.verifyToken<JwtBody>(token);

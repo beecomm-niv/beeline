@@ -60,7 +60,6 @@ const TrackStatus = (props: Props) => {
             },
           }
         ),
-      onDecline: () => snackbar.enqueueSnackbar('נכשל לבטל הזמנה', { variant: 'error' }),
     });
   };
 

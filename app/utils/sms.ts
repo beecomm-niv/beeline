@@ -53,7 +53,7 @@ export class SmsUtils {
     });
 
     if (response.data.error) {
-      throw ApiResponse.SmsMessageError(response.data.message);
+      throw ApiResponse.SmsMessageError();
     }
   };
 }

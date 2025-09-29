@@ -40,8 +40,15 @@ const ApplicationForm = (props: Props) => {
   }, []);
 
   const onSubmit = async () => {
-    if (!name || !surName || !phone || !selectedDinners) {
-      return snackbar.enqueueSnackbar('כל השדות חובה', { variant: 'error' });
+    let message = '';
+
+    if (!name) message = 'יש להזין שם פרטי';
+    else if (!surName) message = 'יש להזין שם משפחה';
+    else if (!phone) message = 'יש להזין טלפון';
+    else if (!selectedDinners) message = 'יש להזין מספר סועדים';
+
+    if (message) {
+      return snackbar.enqueueSnackbar(message, { variant: 'error' });
     }
 
     const storageValue: CacheUser = {

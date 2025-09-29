@@ -47,10 +47,6 @@ export class ApiResponse<T> {
     return this.failure('The requested email is alrady exist', 1003);
   }
 
-  public static TokenIsMissing(): ApiResponse<null> {
-    return this.failure('Token is missing', 1004);
-  }
-
   public static CustomerHaveActiveReservation(): ApiResponse<null> {
     return this.failure('The customer alrady have active reservation', 1005);
   }
@@ -67,11 +63,19 @@ export class ApiResponse<T> {
     return this.failure('The sms settings is invalid', 1008);
   }
 
-  public static SmsMessageError(message: string): ApiResponse<null> {
-    return this.failure(message, 1009);
+  public static SmsMessageError(): ApiResponse<null> {
+    return this.failure('Failed to send sms', 1009);
   }
 
   public static FailedToUploadImage(): ApiResponse<null> {
     return this.failure('Failed to upload image', 1010);
+  }
+
+  public static TokenIsExpired(): ApiResponse<null> {
+    return this.failure('The token is expired', 1011);
+  }
+
+  public static BadPhoneNumber(): ApiResponse<null> {
+    return this.failure('Bad phone number', 1012);
   }
 }

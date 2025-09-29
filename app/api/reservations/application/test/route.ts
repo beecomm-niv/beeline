@@ -11,19 +11,15 @@ export const POST = (request: Request) =>
   errorHandler<string>(async () => {
     const accessToken = request.headers.get('access_token');
     if (!accessToken) {
-      throw ApiResponse.UnknownError();
+      throw ApiResponse.Unauthorized();
     }
 
     const body = await JwtUtils.verifyToken<ReservationApplication>(accessToken);
     if (!body) {
-      throw ApiResponse.InvalidBody();
+      throw ApiResponse.TokenIsExpired();
     }
 
     const { code }: { code: string } = await request.json();
-
-    if (!code) {
-      throw ApiResponse.InvalidBody();
-    }
 
     const customer = await CustomerUtils.getCustomerByPhone(body.phone);
     if (customer?.activeReservationId) {

@@ -74,7 +74,7 @@ export const OTP = (props: Props) => {
   };
 
   return (
-    <Box sx={{ display: 'flex', height: '100svh', width: '100%', alignItems: 'center', flexDirection: 'column', padding: '0 5%', gap: 3, marginTop: '20%' }}>
+    <Box sx={{ display: 'flex', height: '100svh', width: '100%', alignItems: 'center', flexDirection: 'column', padding: '20% 5% 0 5%', gap: 3 }}>
       <LockIcon color='primary' sx={{ fontSize: 70 }} />
       <Typography variant='h6' textAlign='center'>
         אנא הכנס את קוד האימות שנשלח אלייך בהודעת SMS

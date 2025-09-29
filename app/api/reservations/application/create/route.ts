@@ -10,12 +10,12 @@ export const POST = (request: Request) =>
   errorHandler<string>(async () => {
     const accessToken = request.headers.get('access_token');
     if (!accessToken) {
-      throw ApiResponse.UnknownError();
+      throw ApiResponse.Unauthorized();
     }
 
     const payload = await JwtUtils.verifyToken<{ branchId: string }>(accessToken);
     if (!payload) {
-      throw ApiResponse.UnknownError();
+      throw ApiResponse.TokenIsExpired();
     }
 
     const body: ReservationApplication = await request.json();
@@ -25,6 +25,11 @@ export const POST = (request: Request) =>
 
     if (!branchId || !dinners || !fullName || !phone) {
       throw ApiResponse.InvalidBody();
+    }
+
+    const regex = /^05\d[ -]?\d{7}$/;
+    if (!regex.test(phone)) {
+      throw ApiResponse.BadPhoneNumber();
     }
 
     const customer = await CustomerUtils.getCustomerByPhone(phone);
