@@ -44,6 +44,8 @@ export const OTP = (props: Props) => {
 
   const onSetTimer = () => {
     let value = TIMEOUT_LENGTH;
+    setTimer(value);
+
     timeout.current = setInterval(() => {
       value--;
       setTimer(value);
@@ -80,24 +82,25 @@ export const OTP = (props: Props) => {
         אנא הכנס את קוד האימות שנשלח אלייך בהודעת SMS
       </Typography>
 
-      <Box sx={{ display: 'flex', gap: 2, direction: 'ltr' }}>
-        <Input inputRef={ref1} value={code[0]} onChange={(e) => onChange(e.target.value, 0, ref1.current, ref2.current, null)} />
-        <Input inputRef={ref2} value={code[1]} onChange={(e) => onChange(e.target.value, 1, ref2.current, ref3.current, ref1.current)} />
-        <Input inputRef={ref3} value={code[2]} onChange={(e) => onChange(e.target.value, 2, ref3.current, ref4.current, ref2.current)} />
-        <Input inputRef={ref4} value={code[3]} onChange={(e) => onChange(e.target.value, 3, ref4.current, null, ref3.current)} />
+      <Box>
+        <Box sx={{ display: 'flex', gap: 2, direction: 'ltr' }}>
+          <Input inputRef={ref1} value={code[0]} onChange={(e) => onChange(e.target.value, 0, ref1.current, ref2.current, null)} />
+          <Input inputRef={ref2} value={code[1]} onChange={(e) => onChange(e.target.value, 1, ref2.current, ref3.current, ref1.current)} />
+          <Input inputRef={ref3} value={code[2]} onChange={(e) => onChange(e.target.value, 2, ref3.current, ref4.current, ref2.current)} />
+          <Input inputRef={ref4} value={code[3]} onChange={(e) => onChange(e.target.value, 3, ref4.current, null, ref3.current)} />
+        </Box>
+
+        <Button variant='contained' fullWidth sx={{ borderRadius: '10px', marginTop: 4 }} onClick={onSubmit} disabled={props.isLoading}>
+          שליחה
+        </Button>
       </Box>
 
-      <Button variant='contained' fullWidth sx={{ borderRadius: '10px', marginTop: 2 }} onClick={onSubmit} disabled={props.isLoading}>
-        שליחה
-      </Button>
-
-      {timer > 0 ? (
-        <Typography color='text.secondary'>לא קיבלתם קוד ? נשלח שוב בעוד 0:{timer.toString().padStart(2, '0')}</Typography>
-      ) : (
-        <Typography onClick={onResend} color='primary'>
-          שלח שוב
-        </Typography>
-      )}
+      <Box sx={{ marginTop: 2, textAlign: 'center' }}>
+        <Typography color='text.secondary'>לא קיבלתם קוד ? ניתן לשלוח שוב בעוד 0:{timer.toString().padStart(2, '0')}</Typography>
+        <Button onClick={onResend} color='primary' variant='outlined' fullWidth={false} sx={{ marginTop: 1 }} disabled={timer > 0 || props.isLoading}>
+          <Typography color={timer > 0 || props.isLoading ? undefined : 'primary'}>שלח שוב</Typography>
+        </Button>
+      </Box>
     </Box>
   );
 };
