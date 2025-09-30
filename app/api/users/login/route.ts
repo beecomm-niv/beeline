@@ -1,14 +1,14 @@
 import { ApiResponse } from '@/app/models/api-response';
-import { CookieUtils } from '@/app/utils/cookies';
 import errorHandler from '@/app/utils/error-handler';
 import { JwtUtils } from '@/app/utils/jwt';
+import { OtpUtils } from '@/app/utils/otp';
 import { UsersUtils } from '@/app/utils/users';
 
 import bcrypt from 'bcrypt';
 import { NextResponse } from 'next/server';
 
 export const POST = (request: Request) =>
-  errorHandler<boolean>(async () => {
+  errorHandler<string>(async () => {
     const body: { email: string; password: string } = await request.json();
 
     body.email = body.email?.trim().toLocaleLowerCase();
@@ -30,15 +30,13 @@ export const POST = (request: Request) =>
       throw ApiResponse.BadUserOrPassword();
     }
 
-    const token = await JwtUtils.getToken({ role: user.role, userId: user.userId });
+    await OtpUtils.trySendOTP(user.phone);
+
+    const token = await JwtUtils.getToken({ userId: user.userId });
 
     if (!token) {
       throw ApiResponse.FailedToFetchUser();
     }
 
-    const response = NextResponse.json(ApiResponse.success(true));
-
-    CookieUtils.setAuthCookie(response, token);
-
-    return response;
+    return NextResponse.json(ApiResponse.success(token));
   });

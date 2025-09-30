@@ -2,9 +2,7 @@ import { ApiResponse } from '@/app/models/api-response';
 import errorHandler from '@/app/utils/error-handler';
 import { UsersUtils } from '@/app/utils/users';
 import { hash } from 'bcrypt';
-import { JwtUtils } from '@/app/utils/jwt';
 import { NextResponse } from 'next/server';
-import { CookieUtils } from '@/app/utils/cookies';
 import { adminAuth } from '../../database';
 
 export const POST = async (request: Request) =>
@@ -31,15 +29,5 @@ export const POST = async (request: Request) =>
     await adminAuth.createUser({ email, password, uid: user.userId });
     await adminAuth.setCustomUserClaims(user.userId, { uid: user.userId, domain: 'beeline' });
 
-    const token = await JwtUtils.getToken({ role: 'user', userId: user.userId });
-
-    if (!token) {
-      throw ApiResponse.FailedToFetchUser();
-    }
-
-    const response = NextResponse.json(ApiResponse.success(true));
-
-    CookieUtils.setAuthCookie(response, token);
-
-    return response;
+    return NextResponse.json(ApiResponse.success(true));
   });

@@ -34,6 +34,16 @@ const routes: Route[] = [
   },
 
   {
+    pathname: '/users/test',
+    useAuthGuard: false,
+  },
+
+  {
+    pathname: '/users/resend',
+    useAuthGuard: false,
+  },
+
+  {
     pathname: '/users',
     useAuthGuard: false,
   },
