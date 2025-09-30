@@ -1,5 +1,5 @@
 import { ReservationAction } from '@/app/models/reservation';
-import { Backdrop, Box, IconButton, styled, Typography, useTheme } from '@mui/material';
+import { Backdrop, Box, CircularProgress, IconButton, styled, Typography, useTheme } from '@mui/material';
 import { useMemo } from 'react';
 
 import { SwipeButton } from 'swipe-button';
@@ -8,6 +8,9 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import CancelIcon from '@mui/icons-material/Cancel';
+import useHttpRequest from '@/app/hooks/request';
+import { HttpUtils } from '@/app/utils/http';
+import { ReservationsCacheUtils } from '@/app/utils/reservations-cache';
 
 interface Props {
   reservation: ReservationAction | null;
@@ -18,15 +21,32 @@ const ApproveOrDeclineReservation = (props: Props) => {
   const theme = useTheme();
 
   const isApproved = useMemo(() => props.reservation?.status === 'approved', [props.reservation?.status]);
+  const { loading, request } = useHttpRequest();
 
-  const onSuccess = () => {};
+  const onSuccess = () => {
+    if (!props.reservation) return;
+
+    request({
+      request: () => HttpUtils.post('/reservations', props.reservation),
+      onSuccess: () => {
+        ReservationsCacheUtils.hide(props.reservation!.reservation.id);
+        props.onCancel();
+      },
+    });
+  };
+
+  const onClose = () => {
+    if (!loading) {
+      props.onCancel();
+    }
+  };
 
   return (
-    <Backdrop open={!!props.reservation} onClick={props.onCancel} sx={{ flexDirection: 'column', gap: 5, backgroundColor: '#000000c7' }}>
+    <Backdrop open={!!props.reservation} onClick={onClose} sx={{ flexDirection: 'column', gap: 5, backgroundColor: '#000000c7' }}>
       {props.reservation && (
         <>
           <Box sx={{ position: 'absolute', top: '5%' }}>
-            <IconButton onClick={props.onCancel}>
+            <IconButton onClick={onClose}>
               <CancelIcon sx={{ fontSize: 60 }} />
             </IconButton>
           </Box>
@@ -50,7 +70,7 @@ const ApproveOrDeclineReservation = (props: Props) => {
                 <Typography variant='h6'>{isApproved ? 'החלק לזימון' : 'החלק לביטול'}</Typography>
               </SwipeButton.Rail>
               <Overlay c={isApproved ? theme.palette.primary.main : theme.palette.error.main}>
-                <Typography sx={{ direction: 'rtl' }}>{isApproved ? 'שולח SMS' : 'מבטל הזמנה'}</Typography>
+                {!loading ? <Typography sx={{ direction: 'rtl' }}>{isApproved ? 'שולח SMS' : 'מבטל הזמנה'}</Typography> : <CircularProgress color='inherit' size={30} />}
               </Overlay>
               <Slider c={isApproved ? theme.palette.primary.main : theme.palette.error.main}>
                 <Typography sx={{ color: 'text.primary' }}>{'>'}</Typography>

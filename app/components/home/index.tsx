@@ -7,6 +7,8 @@ import ReservationsList from './reservations-list';
 import ReservationsFilter from './reservations-filter';
 import { Box, Typography } from '@mui/material';
 import ApproveOrDeclineReservation from './approve-decline-reservation';
+import { ReservationsCacheUtils } from '@/app/utils/reservations-cache';
+import ReservationsRefresh from './reservations-refresh';
 
 const Home = () => {
   const storeReservations = useManagementStore((s) => s.reservations);
@@ -17,8 +19,12 @@ const Home = () => {
   const [selectedReservation, setSelectedReservation] = useState<ReservationAction | null>(null);
 
   useEffect(() => {
-    setReservations(storeReservations);
+    refreshReservations(storeReservations);
   }, [storeReservations]);
+
+  const refreshReservations = (state: Reservation[]) => {
+    setReservations(state.filter((r) => !ReservationsCacheUtils.hiddenReservations.has(r.id)));
+  };
 
   if (!isFetched) {
     return <div>Loading...</div>;
@@ -30,6 +36,7 @@ const Home = () => {
       <ReservationsFilter />
       <ReservationsList reservations={reservations} setReservationAction={setSelectedReservation} />
       <ApproveOrDeclineReservation reservation={selectedReservation} onCancel={() => setSelectedReservation(null)} />
+      <ReservationsRefresh reservations={reservations} setReservations={setReservations} />
     </Box>
   );
 };
