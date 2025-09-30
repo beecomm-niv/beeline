@@ -24,7 +24,7 @@ const palette: Record<'light' | 'dark', Pallete> = {
   dark: {
     palettePrimary: '#1aae6a',
     textPrimary: '#ffffff',
-    textSecondery: '#c9c9c9ff',
+    textSecondery: '#979797',
     defaultBackground: '#121212',
     outlinedBackground: '#bbbbbbff',
     papper: '#1E1E1E',
@@ -38,7 +38,7 @@ const palette: Record<'light' | 'dark', Pallete> = {
     outlinedBackground: '#c7c7c7ff',
     papper: '#d4d4d4',
     palleteSecondery: '#edc210',
-    textSecondery: 'gray',
+    textSecondery: '#979797',
     placeholder: '#A1A1A1',
   },
 };

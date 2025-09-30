@@ -1,4 +1,4 @@
-import { Reservation } from '@/app/models/reservation';
+import { Reservation, ReservationAction } from '@/app/models/reservation';
 import { ListItemButton, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarmOutlined';
@@ -7,9 +7,11 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhoneOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircleOutlined';
 import { useAppStore } from '@/app/store/appStore-provider';
 import { useMemo } from 'react';
+import { moment } from '@/app/utils/dayjs';
 
 interface Props {
   reservations: Reservation[];
+  setReservationAction: (a: ReservationAction) => void;
 }
 
 const ReservationsList = (props: Props) => {
@@ -42,14 +44,14 @@ const ReservationsList = (props: Props) => {
               <Body align={align}>{r.fullName}</Body>
               <Body align={align}>{r.phone}</Body>
               <Body align={align}>{r.dinners}</Body>
-              <Body align={align}>4 דק</Body>
+              <Body align={align}>{moment().diff(r.ts, 'minutes')} דק</Body>
               <Body align={align} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <ListItemButton>
+                <ListItemButton onClick={() => props.setReservationAction({ reservation: r, status: 'approved' })}>
                   <Typography color='primary' fontSize={20}>
                     זימון
                   </Typography>
                 </ListItemButton>
-                <ListItemButton>
+                <ListItemButton onClick={() => props.setReservationAction({ reservation: r, status: 'cancel' })}>
                   <Typography color='text.secondary' fontSize={20}>
                     ביטול
                   </Typography>

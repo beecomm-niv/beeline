@@ -24,3 +24,8 @@ export interface CustomerReservation {
   branchId: string;
   status: CustomerReservationStatus;
 }
+
+export interface ReservationAction {
+  reservation: Reservation;
+  status: CustomerReservationStatus;
+}

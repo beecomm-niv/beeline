@@ -1,17 +1,20 @@
 'use client';
 
-import { Reservation } from '@/app/models/reservation';
+import { Reservation, ReservationAction } from '@/app/models/reservation';
 import { useManagementStore } from '@/app/store/management-provider';
 import { useEffect, useState } from 'react';
 import ReservationsList from './reservations-list';
 import ReservationsFilter from './reservations-filter';
 import { Box, Typography } from '@mui/material';
+import ApproveOrDeclineReservation from './approve-decline-reservation';
 
 const Home = () => {
   const storeReservations = useManagementStore((s) => s.reservations);
   const isFetched = useManagementStore((s) => s.isReservationsFetched);
 
   const [reservations, setReservations] = useState<Reservation[]>(storeReservations);
+
+  const [selectedReservation, setSelectedReservation] = useState<ReservationAction | null>(null);
 
   useEffect(() => {
     setReservations(storeReservations);
@@ -25,7 +28,8 @@ const Home = () => {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <Typography variant='h5'>הזמנות</Typography>
       <ReservationsFilter />
-      <ReservationsList reservations={reservations} />
+      <ReservationsList reservations={reservations} setReservationAction={setSelectedReservation} />
+      <ApproveOrDeclineReservation reservation={selectedReservation} onCancel={() => setSelectedReservation(null)} />
     </Box>
   );
 };
