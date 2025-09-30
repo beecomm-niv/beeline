@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 import TrackStatus from './track-status';
 import { onValue, ref } from 'firebase/database';
 import { REALTIME_DATABASE } from '@/app/utils/firebase-client';
+import ReservationApproved from './reservation-approved';
+import ReservationCancel from './reservation-cancel';
 
 interface Props {
   reservation: CustomerReservation;
@@ -30,11 +32,11 @@ const Track = (props: Props) => {
   }
 
   if (reservation.status === 'approved') {
-    return <div>Approved</div>;
+    return <ReservationApproved />;
   }
 
   if (reservation.status === 'cancel') {
-    return <div>Cancel</div>;
+    return <ReservationCancel />;
   }
 
   return <TrackStatus lines={props.lines} reservation={reservation} token={props.token} />;
