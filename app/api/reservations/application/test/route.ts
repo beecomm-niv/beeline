@@ -26,7 +26,7 @@ export const POST = (request: Request) =>
       throw ApiResponse.UnknownError();
     }
 
-    await OtpUtils.tryMatchOTP(body.phone, code);
+    await OtpUtils.tryMatchOTP(body.phone, body.phone, code);
 
     const reservation = await ReservationUtils.signReservation(body);
 

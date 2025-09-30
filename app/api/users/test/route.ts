@@ -26,7 +26,7 @@ export const POST = (request: NextRequest) =>
 
     const { code } = await request.json();
 
-    await OtpUtils.tryMatchOTP(user.phone, code);
+    await OtpUtils.tryMatchOTP(user.userId, user.phone, code);
 
     const result = await JwtUtils.getToken({ role: user.role, userId: user.userId });
     if (!result) {

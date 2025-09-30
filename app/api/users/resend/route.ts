@@ -22,7 +22,7 @@ export const POST = (request: NextRequest) =>
       throw ApiResponse.Unauthorized();
     }
 
-    await OtpUtils.trySendOTP(user.phone);
+    await OtpUtils.trySendOTP(user.userId, user.phone);
 
     return NextResponse.json(ApiResponse.success(true));
   });

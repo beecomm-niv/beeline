@@ -21,14 +21,14 @@ export class OtpUtils {
     ts: moment().valueOf(),
   });
 
-  private static getOTP = async (phone: string): Promise<OTP> => {
-    const data = await this.collection.doc('/' + phone).get();
+  private static getOTP = async (path: string): Promise<OTP> => {
+    const data = await this.collection.doc('/' + path).get();
 
     return (data.data() || this.getDefaultOTP()) as OTP;
   };
 
-  public static trySendOTP = async (phone: string) => {
-    let data = await this.getOTP(phone);
+  public static trySendOTP = async (path: string, phone: string) => {
+    let data = await this.getOTP(path);
 
     const isOtpActive = moment(data.ts).diff(moment(), 'hours') < 5;
 
@@ -46,11 +46,11 @@ export class OtpUtils {
 
     // sendSMS
 
-    await this.collection.doc('/' + phone).set(data);
+    await this.collection.doc('/' + path).set(data);
   };
 
-  public static tryMatchOTP = async (phone: string, code: string) => {
-    const otp = await this.getOTP(phone);
+  public static tryMatchOTP = async (path: string, phone: string, code: string) => {
+    const otp = await this.getOTP(path);
 
     if (!otp) {
       throw ApiResponse.UnknownError();
@@ -63,10 +63,10 @@ export class OtpUtils {
     const success = otp.code === code;
 
     if (success) {
-      await this.collection.doc('/' + phone).delete();
+      await this.collection.doc('/' + path).delete();
     } else {
       otp.tries++;
-      await this.collection.doc('/' + phone).set(otp);
+      await this.collection.doc('/' + path).set(otp);
       throw ApiResponse.UnmatchedCode();
     }
   };
