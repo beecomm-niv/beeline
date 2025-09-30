@@ -1,11 +1,12 @@
 'use client';
 
-import { Card, List, ListItem, ListItemButton, ListItemIcon, Typography } from '@mui/material';
+import { Box, Card, List, ListItem, ListItemButton, ListItemIcon, Typography } from '@mui/material';
 import { ReactElement } from 'react';
 
 import PlaylistAddCheckOutlinedIcon from '@mui/icons-material/PlaylistAddCheckOutlined';
 import RecentActorsOutlinedIcon from '@mui/icons-material/RecentActorsOutlined';
 import Settings from '@mui/icons-material/SettingsOutlined';
+import RestaurantIcon from '@mui/icons-material/Restaurant';
 
 import { useAppStore } from '@/app/store/appStore-provider';
 import { Translate } from '@/app/utils/translate';
@@ -51,9 +52,12 @@ const Drawer = () => {
 
   return (
     <Card sx={{ height: '100%' }}>
-      <Typography variant='h6' sx={{ padding: '20px 16px 10px 16px' }}>
-        {branch.name}
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', padding: '20px 16px 10px 16px', gap: 2 }}>
+        <RestaurantIcon fontSize='small' color='primary' />
+        <Typography variant='h6' color='primary'>
+          {branch.name}
+        </Typography>
+      </Box>
       <List>
         {routes.map((r) => (
           <ListItem key={r.path}>

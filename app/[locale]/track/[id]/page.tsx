@@ -29,7 +29,7 @@ const TrackPage = async (props: Props) => {
     return <div>Error</div>;
   }
 
-  return <Track lines={branch.lines} reservation={reservation} token={token} />;
+  return <Track branch={branch} reservation={reservation} token={token} />;
 };
 
 export default TrackPage;

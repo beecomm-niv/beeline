@@ -1,18 +1,22 @@
 'use client';
 
-import { Line } from '@/app/models/branch';
+import { Branch } from '@/app/models/branch';
 import { CustomerReservation, LightReservation } from '@/app/models/reservation';
 import { REALTIME_DATABASE } from '@/app/utils/firebase-client';
-import { Box, Button, Card, CardContent, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, CircularProgress, Typography } from '@mui/material';
 import { onValue, ref } from 'firebase/database';
 import { useEffect, useMemo, useState } from 'react';
 
 import useHttpRequest from '@/app/hooks/request';
 import { HttpUtils } from '@/app/utils/http';
 
+import facebook from '../../../../public/facebook.png';
+import instagram from '../../../../public/instagram.png';
+import Image from 'next/image';
+
 interface Props {
   reservation: CustomerReservation;
-  lines: Line[];
+  branch: Branch;
   token: string;
 }
 
@@ -25,7 +29,7 @@ const TrackStatus = (props: Props) => {
   useEffect(() => {
     const dinnersToLineId: Record<number, string> = {};
 
-    props.lines.forEach((l) => l.dinnersRange.forEach((d) => (dinnersToLineId[d] = l.id)));
+    (props.branch.lines || []).forEach((l) => l.dinnersRange.forEach((d) => (dinnersToLineId[d] = l.id)));
 
     const sub = onValue(ref(REALTIME_DATABASE, '/c_line/' + props.reservation.branchId), (snapshot) => {
       const data: Record<string, LightReservation> | null = snapshot.val();
@@ -74,15 +78,24 @@ const TrackStatus = (props: Props) => {
       </Typography>
       <Card sx={{ width: '175px', height: '175px', borderRadius: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <CardContent>
-          <Typography color='primary' variant='h2'>
-            {place}
-          </Typography>
+          {place > 0 ? (
+            <Typography color='primary' variant='h2'>
+              {place}
+            </Typography>
+          ) : (
+            <CircularProgress />
+          )}
         </CardContent>
       </Card>
 
       <Button variant='contained' color='error' fullWidth sx={{ marginTop: 4, borderRadius: '10px' }} onClick={cancelReservation} disabled={loading}>
         ביטול הרשמה
       </Button>
+
+      <Box sx={{ display: 'flex', gap: 4, marginTop: 5 }}>
+        {props.branch.facebook && <Image src={facebook} alt='' width={40} height={40} onClick={() => window.open(props.branch.facebook, '_blank')} />}
+        {props.branch.instagram && <Image src={instagram} alt='' width={40} height={40} onClick={() => window.open(props.branch.instagram, '_blank')} />}
+      </Box>
     </Box>
   );
 };

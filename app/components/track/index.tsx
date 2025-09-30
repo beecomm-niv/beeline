@@ -1,6 +1,6 @@
 'use client';
 
-import { Line } from '@/app/models/branch';
+import { Branch } from '@/app/models/branch';
 import { CustomerReservation } from '@/app/models/reservation';
 import { useEffect, useState } from 'react';
 import TrackStatus from './track-status';
@@ -11,7 +11,7 @@ import ReservationCancel from './reservation-cancel';
 
 interface Props {
   reservation: CustomerReservation;
-  lines: Line[];
+  branch: Branch;
   token: string;
 }
 
@@ -39,7 +39,7 @@ const Track = (props: Props) => {
     return <ReservationCancel />;
   }
 
-  return <TrackStatus lines={props.lines} reservation={reservation} token={props.token} />;
+  return <TrackStatus branch={props.branch} reservation={reservation} token={props.token} />;
 };
 
 export default Track;

@@ -1,7 +1,10 @@
 export interface Branch {
   id: string;
   name: string;
+
   image?: string;
+  instagram?: string;
+  facebook?: string;
 
   lines?: Line[];
 }

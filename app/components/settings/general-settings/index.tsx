@@ -1,7 +1,7 @@
 'use client';
 
 import useBranchAction from '@/app/hooks/useBranchUpdate';
-import { Box, Button, Card, Divider, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, Divider, styled, TextField, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { HttpUtils } from '@/app/utils/http';
@@ -64,14 +64,14 @@ const GeneralSettings = () => {
       <Typography variant='h5'>הגדרות כלליות</Typography>
 
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, marginTop: 8 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <ItemContainer>
           <Typography>שם מסעדה</Typography>
           <TextField value={editBranch.name} onChange={(e) => onChange('name', e.target.value)} />
-        </Box>
+        </ItemContainer>
 
         <Divider />
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <ItemContainer>
           <Typography>תמונה</Typography>
           {!editBranch.image && !preshow && (
             <Card sx={{ width: 100, height: 100, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '20px' }} onClick={() => inputRef.current?.click()}>
@@ -84,9 +84,21 @@ const GeneralSettings = () => {
           )}
 
           <input ref={inputRef} style={{ width: 0, height: 0, opacity: 0, position: 'absolute', top: 0, left: 0 }} type='file' onChange={(e) => onFileSelected(e.target.files)} />
-        </Box>
+        </ItemContainer>
 
         <Divider />
+
+        <ItemContainer>
+          <Typography>אינסטגרם</Typography>
+          <TextField value={editBranch.instagram || ''} dir='ltr' onChange={(e) => onChange('instagram', e.target.value)} />
+        </ItemContainer>
+
+        <Divider />
+
+        <ItemContainer>
+          <Typography>פייסבוק</Typography>
+          <TextField value={editBranch.facebook || ''} dir='ltr' onChange={(e) => onChange('facebook', e.target.value)} />
+        </ItemContainer>
 
         <Button sx={{ marginTop: 4 }} variant='contained' onClick={onSave} disabled={loading}>
           שמירה
@@ -95,5 +107,11 @@ const GeneralSettings = () => {
     </Box>
   );
 };
+
+const ItemContainer = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+});
 
 export default GeneralSettings;
