@@ -23,7 +23,7 @@ const Home = () => {
   }, [storeReservations]);
 
   const refreshReservations = (state: Reservation[]) => {
-    setReservations(state.filter((r) => !ReservationsCacheUtils.hiddenReservations.has(r.id)));
+    setReservations(state.filter((r) => !ReservationsCacheUtils.hiddenReservations.has(r.id)).sort((a, b) => a.ts - b.ts));
   };
 
   if (!isFetched) {

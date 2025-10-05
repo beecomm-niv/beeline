@@ -13,6 +13,7 @@ import { HttpUtils } from '@/app/utils/http';
 import facebook from '../../../../public/facebook.png';
 import instagram from '../../../../public/instagram.png';
 import Image from 'next/image';
+import { HelperUtils } from '@/app/utils/helpers';
 
 interface Props {
   reservation: CustomerReservation;
@@ -28,7 +29,6 @@ const TrackStatus = (props: Props) => {
 
   useEffect(() => {
     const dinnersToLineId: Record<number, string> = {};
-
     (props.branch.lines || []).forEach((l) => l.dinnersRange.forEach((d) => (dinnersToLineId[d] = l.id)));
 
     const sub = onValue(ref(REALTIME_DATABASE, '/c_line/' + props.reservation.branchId), (snapshot) => {
@@ -37,11 +37,7 @@ const TrackStatus = (props: Props) => {
       if (!data) {
         return setWaitingsList(null);
       } else {
-        setWaitingsList(
-          Object.values(data)
-            .map((l) => ({ ...l, lineId: dinnersToLineId[l.dinners] }))
-            .sort((a, b) => a.ts - b.ts)
-        );
+        setWaitingsList(HelperUtils.convertReservationsToWaitingList(dinnersToLineId, data, props.reservation));
       }
     });
 
