@@ -15,15 +15,19 @@ const Home = () => {
   const isFetched = useManagementStore((s) => s.isReservationsFetched);
 
   const [reservations, setReservations] = useState<Reservation[]>(storeReservations);
-
   const [selectedReservation, setSelectedReservation] = useState<ReservationAction | null>(null);
 
-  useEffect(() => {
-    refreshReservations(storeReservations);
-  }, [storeReservations]);
+  const [dinners, setDinners] = useState<Set<number>>(new Set());
+  const [phone, setPhone] = useState('');
 
-  const refreshReservations = (state: Reservation[]) => {
-    setReservations(state.filter((r) => !ReservationsCacheUtils.hiddenReservations.has(r.id)).sort((a, b) => a.ts - b.ts));
+  useEffect(() => {
+    refreshReservations(storeReservations, phone, dinners);
+  }, [storeReservations, phone, dinners]);
+
+  const refreshReservations = (state: Reservation[], phone: string, dinners: Set<number>) => {
+    setReservations(
+      state.filter((r) => !ReservationsCacheUtils.hiddenReservations.has(r.id) && (!phone || r.phone.includes(phone)) && (!dinners.size || dinners.has(r.dinners))).sort((a, b) => a.ts - b.ts)
+    );
   };
 
   if (!isFetched) {
@@ -33,7 +37,7 @@ const Home = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <Typography variant='h5'>הזמנות</Typography>
-      <ReservationsFilter />
+      <ReservationsFilter selectedDinners={dinners} setSelectedDinners={setDinners} phone={phone} setPhone={setPhone} />
       <ReservationsList reservations={reservations} setReservationAction={setSelectedReservation} />
       <ApproveOrDeclineReservation reservation={selectedReservation} onCancel={() => setSelectedReservation(null)} />
       <ReservationsRefresh reservations={reservations} setReservations={setReservations} />
