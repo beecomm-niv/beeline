@@ -67,7 +67,9 @@ const TrackStatus = (props: Props) => {
 
   return (
     <Box sx={{ display: 'flex', height: '100svh', width: '100%', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: 2, padding: '0 20px' }}>
-      <Typography variant='h4'>אתם ברשימת ההמתנה !</Typography>
+      <Typography variant='h4' sx={{ whiteSpace: 'nowrap' }}>
+        אתם ברשימת ההמתנה !
+      </Typography>
 
       <Typography sx={{ marginTop: 2, marginBottom: -1 }} color='text.secondary'>
         מיקומכם בתור הוא

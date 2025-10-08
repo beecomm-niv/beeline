@@ -2,6 +2,7 @@ import { ApiResponse } from '@/app/models/api-response';
 import { CustomerReservationStatus, Reservation } from '@/app/models/reservation';
 import errorHandler from '@/app/utils/error-handler';
 import { ReservationUtils } from '@/app/utils/reservations';
+import { SmsUtils } from '@/app/utils/sms';
 import { NextRequest, NextResponse } from 'next/server';
 
 interface Body {
@@ -20,7 +21,7 @@ export const POST = (request: NextRequest) =>
     await ReservationUtils.finishReservation(reservation.id, reservation.branchId, status);
 
     if (status === 'approved') {
-      // send sms
+      await SmsUtils.sendMessage(reservation.branchId, reservation.phone, `התור שלכם הגיע ! יש לפנות למארחת המסעדה להושבה..`);
     }
 
     return NextResponse.json(ApiResponse.success(true));

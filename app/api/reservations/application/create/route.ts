@@ -37,7 +37,7 @@ export const POST = (request: Request) =>
       throw ApiResponse.CustomerHaveActiveReservation();
     }
 
-    await OtpUtils.trySendOTP(phone, phone);
+    await OtpUtils.trySendOTP(phone, phone, branchId);
 
     const token = await JwtUtils.getToken(body, '5m');
 

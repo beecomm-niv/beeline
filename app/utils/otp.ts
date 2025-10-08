@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import { moment } from './dayjs';
 import { ApiResponse } from '../models/api-response';
 import { OTP } from '../models/otp';
+import { SmsUtils } from './sms';
 
 const COUNT_TRESHOLD = 5;
 const TRIES_TRESHOLD = 5;
@@ -27,7 +28,7 @@ export class OtpUtils {
     return (data.data() || this.getDefaultOTP()) as OTP;
   };
 
-  public static trySendOTP = async (path: string, phone: string) => {
+  public static trySendOTP = async (path: string, phone: string, branchId: string) => {
     let data = await this.getOTP(path);
 
     const isOtpActive = moment(data.ts).diff(moment(), 'hours') < 5;
@@ -44,12 +45,12 @@ export class OtpUtils {
 
     data.count++;
 
-    // sendSMS
+    await SmsUtils.sendMessage(branchId, phone, `קוד האימות החד פעמי שלך הוא: ${data.code}`);
 
     await this.collection.doc('/' + path).set(data);
   };
 
-  public static tryMatchOTP = async (path: string, phone: string, code: string) => {
+  public static tryMatchOTP = async (path: string, code: string) => {
     const otp = await this.getOTP(path);
 
     if (!otp) {

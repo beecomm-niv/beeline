@@ -5,6 +5,7 @@ import errorHandler from '@/app/utils/error-handler';
 import { JwtUtils } from '@/app/utils/jwt';
 import { OtpUtils } from '@/app/utils/otp';
 import { ReservationUtils } from '@/app/utils/reservations';
+import { SmsUtils } from '@/app/utils/sms';
 import { NextResponse } from 'next/server';
 
 export const POST = (request: Request) =>
@@ -26,11 +27,13 @@ export const POST = (request: Request) =>
       throw ApiResponse.UnknownError();
     }
 
-    await OtpUtils.tryMatchOTP(body.phone, body.phone, code);
+    await OtpUtils.tryMatchOTP(body.phone, code);
 
     const reservation = await ReservationUtils.signReservation(body);
 
     await CustomerUtils.updateCustomer({ phone: body.phone, activeReservationId: reservation.id });
+
+    await SmsUtils.sendMessage(reservation.branchId, reservation.phone, `נרשמתם לתור בהצלחה !. למעקב יש להיכנס ללינק הבא: ${process.env.NEXT_PUBLIC_BASE_URL}/track/${reservation.id}`);
 
     return NextResponse.json(ApiResponse.success(reservation.id));
   });

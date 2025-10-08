@@ -40,7 +40,7 @@ const ReservationsFilter = (props: Props) => {
         />
       </Box>
 
-      <Box sx={{ marginTop: 3, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+      <Box sx={{ marginTop: 3, display: 'flex', flexWrap: 'nowrap', gap: 1 }}>
         <Chip label='הכל' variant={!selectedDinners ? 'filled' : 'outlined'} clickable onClick={() => onDinnersChange({ dinners: 0, lineId: '' })} />
         {dinners?.map((d) => (
           <Chip key={d.dinners} label={`${d.dinners} סועדים`} variant={selectedDinners === d.dinners ? 'filled' : 'outlined'} clickable onClick={() => onDinnersChange(d)} />

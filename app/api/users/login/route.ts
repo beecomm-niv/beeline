@@ -30,7 +30,7 @@ export const POST = (request: Request) =>
       throw ApiResponse.BadUserOrPassword();
     }
 
-    await OtpUtils.trySendOTP(user.userId, user.phone);
+    await OtpUtils.trySendOTP(user.userId, user.phone, user.branchId);
 
     const token = await JwtUtils.getToken({ userId: user.userId });
 
