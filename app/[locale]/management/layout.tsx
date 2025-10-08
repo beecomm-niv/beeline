@@ -8,6 +8,7 @@ import { ManagementProvider } from '@/app/store/management-provider';
 import Drawer from '@/app/components/drawer';
 import NoBranch from '@/app/components/no-branch';
 import ReservationsHandler from '@/app/components/home/reservations-handler';
+import './styles.css';
 
 export default async function ManagementLayout({ children }: { children: React.ReactNode }) {
   const header = await headers();
@@ -34,8 +35,10 @@ export default async function ManagementLayout({ children }: { children: React.R
           <div style={{ width: '20%' }}>
             <Drawer />
           </div>
-          <div style={{ width: '80%', padding: '20px' }}>
-            <ReservationsHandler branchId={branch.id}>{children}</ReservationsHandler>
+          <div style={{ width: '80%', padding: '20px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', overflowY: 'auto' }}>
+              <ReservationsHandler branchId={branch.id}>{children}</ReservationsHandler>
+            </div>
           </div>
         </div>
       </ManagementProvider>
