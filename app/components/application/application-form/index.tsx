@@ -77,14 +77,8 @@ const ApplicationForm = (props: Props) => {
       </Box>
 
       <Box sx={{ width: '100%', marginTop: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
-        <Typography variant='h5' textAlign='center'>
-          הצטרף לרשימת ההמתנה
-        </Typography>
-
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, marginTop: 1 }}>
-          <TextField label='שם פרטי' value={name} onChange={(e) => setName(e.target.value)} />
-          <TextField label='שם משפחה' value={surName} onChange={(e) => setSurName(e.target.value)} />
-        </Box>
+        <TextField label='שם פרטי' value={name} onChange={(e) => setName(e.target.value)} />
+        <TextField label='שם משפחה' value={surName} onChange={(e) => setSurName(e.target.value)} />
 
         <TextField label='טלפון' value={phone} onChange={(e) => setPhone(e.target.value)} />
         <Divider>כמה סועדים ?</Divider>
