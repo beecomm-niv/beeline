@@ -38,7 +38,6 @@ const routes: RouteItem[] = [
 ];
 
 const Drawer = () => {
-  const prefix = useAppStore((s) => s.urlPrefix);
   const translate = useAppStore((s) => s.translate);
 
   const router = useRouter();
@@ -47,7 +46,7 @@ const Drawer = () => {
   const branch = useManagementStore((s) => s.branch);
 
   const onRoute = (path: string) => {
-    router.push(prefix + path);
+    router.push('/' + path);
   };
 
   return (

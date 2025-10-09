@@ -48,7 +48,7 @@ const LoginWithMailAndPassword = () => {
         ),
       onSuccess: async () => {
         await signInWithEmailAndPassword(AUTH, email, password);
-        router.replace(`${prefix}management`);
+        router.replace(`/management`);
       },
     });
   };

@@ -4,12 +4,10 @@ import { Route } from '../models/route';
 import { cookies } from 'next/headers';
 import { JwtUtils } from '../utils/jwt';
 import { JwtBody } from '../models/jwt-body';
-import { NextURL } from 'next/dist/server/web/next-url';
 
 interface UrlSettings {
-  locale: Locale;
-  rewrite: NextURL | null;
-  validPath: string;
+  locale: string;
+  path: string;
 }
 
 const locales: Locale[] = ['he', 'en'];
@@ -42,32 +40,42 @@ const routes: Route[] = [
   },
 ];
 
-const getUrlSettings = (requestUrl: NextURL): UrlSettings => {
-  const currentPath = requestUrl.pathname;
-  const response: UrlSettings = { locale: defaultLocale, rewrite: null, validPath: currentPath };
+const getUrlSettings = (request: NextRequest): UrlSettings => {
+  const segments = request.nextUrl.pathname.split('/').filter(Boolean);
 
-  const requestLocale = locales.find((locale) => currentPath.startsWith(`/${locale}`));
+  let locale = request.cookies.get('lang')?.value;
 
-  if (requestLocale) {
-    response.locale = requestLocale;
-    response.validPath = currentPath.replace(`/${requestLocale}`, '');
-  } else {
-    response.rewrite = requestUrl.clone();
-    response.rewrite.pathname = `/${defaultLocale}${currentPath}`;
+  if (!locale || !locales.includes(locale as Locale)) {
+    locale = locale = defaultLocale;
   }
 
-  return response;
+  const isFirstSegmentLocale = segments.length > 0 && locales.includes(segments[0] as Locale);
+  if (isFirstSegmentLocale) {
+    if (segments[0] !== locale) {
+    }
+
+    segments[0] = locale;
+  } else {
+    segments.unshift(locale);
+  }
+
+  const path = `/${segments.slice(1).join('/')}`;
+
+  if (segments[0] === defaultLocale) {
+    segments.shift();
+  }
+  return { locale, path };
 };
 
 const pagesMiddleware = async (request: NextRequest) => {
-  const settings = getUrlSettings(request.nextUrl);
+  const { locale, path } = getUrlSettings(request);
 
   const handler = routes.find((r) => {
     if (r.pathname.endsWith('/*')) {
-      return settings.validPath.startsWith(r.pathname.replace('/*', ''));
+      return path.startsWith(r.pathname.replace('/*', ''));
     }
 
-    return r.pathname === settings.validPath;
+    return r.pathname === path;
   });
 
   if (!handler) {
@@ -85,11 +93,14 @@ const pagesMiddleware = async (request: NextRequest) => {
     }
 
     if (!authPayload) {
-      return NextResponse.redirect(new URL(`/${settings.locale}/login`, request.url));
+      return new NextResponse('Unauthorized', { status: 401 });
     }
   }
 
-  const response: NextResponse = settings.rewrite ? NextResponse.rewrite(settings.rewrite) : NextResponse.next();
+  const next = request.nextUrl.clone();
+  next.pathname = `${locale}${path}`;
+
+  const response = NextResponse.rewrite(next);
 
   if (authPayload) {
     response.headers.append('x-authenticated-user', authPayload.userId);

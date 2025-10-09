@@ -9,7 +9,6 @@ import { ReservationApplication } from '@/app/models/reservation';
 import { HttpUtils } from '@/app/utils/http';
 import useHttpRequest from '@/app/hooks/request';
 import { useRouter } from 'next/navigation';
-import { useAppStore } from '@/app/store/appStore-provider';
 
 interface Props {
   branch: Branch;
@@ -20,7 +19,6 @@ const Application = (props: Props) => {
   const [application, setApplication] = useState<ReservationApplication | null>(null);
   const [token, setToken] = useState<string | null>('');
 
-  const prefix = useAppStore((s) => s.urlPrefix);
   const sendOTPApi = useHttpRequest();
   const testCodeApi = useHttpRequest();
 
@@ -38,7 +36,7 @@ const Application = (props: Props) => {
             },
           }
         ),
-      onSuccess: (reservationId) => router.push(prefix + `track/${reservationId}`),
+      onSuccess: (reservationId) => router.push(`/track/${reservationId}`),
     });
   };
 
