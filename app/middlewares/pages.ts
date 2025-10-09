@@ -97,8 +97,14 @@ const pagesMiddleware = async (request: NextRequest) => {
     }
   }
 
+  const nextURL = `${locale}${path}`;
+
+  if (path !== request.nextUrl.pathname) {
+    return NextResponse.redirect(new URL(path, request.url));
+  }
+
   const next = request.nextUrl.clone();
-  next.pathname = `${locale}${path}`;
+  next.pathname = nextURL;
 
   const response = NextResponse.rewrite(next);
 
