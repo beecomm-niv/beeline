@@ -5,7 +5,7 @@ import { useManagementStore } from '@/app/store/management-provider';
 import { useEffect, useState } from 'react';
 import ReservationsList from './reservations-list';
 import ReservationsFilter from './reservations-filter';
-import { Box, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import ApproveOrDeclineReservation from './approve-decline-reservation';
 import { ReservationsCacheUtils } from '@/app/utils/reservations-cache';
 import ReservationsRefresh from './reservations-refresh';
@@ -31,7 +31,11 @@ const Home = () => {
   };
 
   if (!isFetched) {
-    return <div>Loading...</div>;
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100svh' }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
