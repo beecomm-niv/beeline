@@ -93,10 +93,8 @@ const LineManager = () => {
       </Card>
 
       {lines.length > 0 && (
-        <Button variant='outlined' fullWidth sx={{ marginTop: 2 }} onClick={onSave} disabled={loading}>
-          <Typography fontSize={20} color='primary'>
-            שמירה
-          </Typography>
+        <Button variant='contained' fullWidth sx={{ marginTop: 2 }} onClick={onSave} disabled={loading}>
+          <Typography fontSize={20}>שמירה</Typography>
         </Button>
       )}
     </Box>

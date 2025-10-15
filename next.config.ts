@@ -7,7 +7,13 @@ const nextConfig: NextConfig = {
   },
 
   images: {
-    domains: ['imageproxy.web.delivery'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'imageproxy.web.delivery',
+        pathname: '/web/**',
+      },
+    ],
   },
 };
 

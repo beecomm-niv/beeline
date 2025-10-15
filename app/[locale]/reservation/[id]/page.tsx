@@ -1,5 +1,26 @@
-const ReservationTrackPage = () => {
-  return <div>Track</div>;
-};
+import Application from '@/app/components/application';
+import { BranchUtils } from '@/app/utils/branch';
+import { JwtUtils } from '@/app/utils/jwt';
 
-export default ReservationTrackPage;
+interface Props {
+  params: Promise<{ id: string }>;
+}
+
+export default async function ReservationPage(props: Props) {
+  const accessToken = (await props.params).id;
+  if (!accessToken) {
+    return <div>Bad request</div>;
+  }
+
+  const payload = await JwtUtils.verifyToken<{ branchId: string }>(accessToken);
+  if (!payload) {
+    return <div>Bad request</div>;
+  }
+
+  const branch = await BranchUtils.getBranchById(payload.branchId);
+  if (!branch) {
+    return <div>Bad request</div>;
+  }
+
+  return <Application branch={branch} accessToken={accessToken} />;
+}

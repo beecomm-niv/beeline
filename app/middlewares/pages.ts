@@ -68,51 +68,55 @@ const getUrlSettings = (request: NextRequest): UrlSettings => {
 };
 
 const pagesMiddleware = async (request: NextRequest) => {
-  const { locale, path } = getUrlSettings(request);
+  try {
+    const { locale, path } = getUrlSettings(request);
 
-  const handler = routes.find((r) => {
-    if (r.pathname.endsWith('/*')) {
-      return path.startsWith(r.pathname.replace('/*', ''));
+    const handler = routes.find((r) => {
+      if (r.pathname.endsWith('/*')) {
+        return path.startsWith(r.pathname.replace('/*', ''));
+      }
+
+      return r.pathname === path;
+    });
+
+    if (!handler) {
+      return new NextResponse('Not Found', { status: 404 });
     }
 
-    return r.pathname === path;
-  });
+    let authPayload: JwtBody | null = null;
 
-  if (!handler) {
-    return new NextResponse('Not Found', { status: 404 });
-  }
+    if (handler.useAuthGuard) {
+      const c = await cookies();
+      const token = c.get('sessionId')?.value;
 
-  let authPayload: JwtBody | null = null;
+      if (token) {
+        authPayload = await JwtUtils.verifyToken<JwtBody>(token);
+      }
 
-  if (handler.useAuthGuard) {
-    const c = await cookies();
-    const token = c.get('sessionId')?.value;
-
-    if (token) {
-      authPayload = await JwtUtils.verifyToken<JwtBody>(token);
+      if (!authPayload) {
+        return new NextResponse('Unauthorized', { status: 401 });
+      }
     }
 
-    if (!authPayload) {
-      return new NextResponse('Unauthorized', { status: 401 });
+    const nextURL = `${locale}${path}`;
+
+    if (path !== request.nextUrl.pathname) {
+      return NextResponse.redirect(new URL(path, request.url));
     }
+
+    const next = request.nextUrl.clone();
+    next.pathname = nextURL;
+
+    const response = NextResponse.rewrite(next);
+
+    if (authPayload) {
+      response.headers.append('x-authenticated-user', authPayload.userId);
+    }
+
+    return response;
+  } catch {
+    return new NextResponse('Internal Server Error', { status: 500 });
   }
-
-  const nextURL = `${locale}${path}`;
-
-  if (path !== request.nextUrl.pathname) {
-    return NextResponse.redirect(new URL(path, request.url));
-  }
-
-  const next = request.nextUrl.clone();
-  next.pathname = nextURL;
-
-  const response = NextResponse.rewrite(next);
-
-  if (authPayload) {
-    response.headers.append('x-authenticated-user', authPayload.userId);
-  }
-
-  return response;
 };
 
 export default pagesMiddleware;
