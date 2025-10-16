@@ -86,6 +86,11 @@ const routes: Route[] = [
     useAuthGuard: true,
     role: 'user',
   },
+
+  {
+    pathname: '/api',
+    useAuthGuard: false,
+  },
 ];
 
 const apiMiddleware = async (request: NextRequest, route: string) => {
