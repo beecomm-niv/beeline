@@ -19,7 +19,6 @@ const LoginWithMailAndPassword = () => {
 
   const router = useRouter();
   const translate = useAppStore((s) => s.translate);
-  const prefix = useAppStore((s) => s.urlPrefix);
   const snackbar = useSnackbar();
   const { loading, request } = useHttpRequest();
 
