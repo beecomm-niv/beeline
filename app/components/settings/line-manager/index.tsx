@@ -59,8 +59,6 @@ const LineManager = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-      <Typography variant='h5'>ניהול תורים</Typography>
-
       {lines.map((l) => (
         <Card key={l.id} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '30px', borderRadius: '20px' }}>
           <Box>

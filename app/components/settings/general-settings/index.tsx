@@ -61,8 +61,6 @@ const GeneralSettings = () => {
 
   return (
     <Box>
-      <Typography variant='h5'>הגדרות כלליות</Typography>
-
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, marginTop: 8 }}>
         <ItemContainer>
           <Typography>שם מסעדה</Typography>

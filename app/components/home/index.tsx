@@ -40,7 +40,6 @@ const Home = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-      <Typography variant='h5'>הזמנות</Typography>
       <ReservationsFilter selectedDinners={dinners} setSelectedDinners={setDinners} phone={phone} setPhone={setPhone} />
       <ReservationsList reservations={reservations} setReservationAction={setSelectedReservation} />
       <ApproveOrDeclineReservation reservation={selectedReservation} onCancel={() => setSelectedReservation(null)} />
