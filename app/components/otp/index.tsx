@@ -109,7 +109,7 @@ export const OTP = (props: Props) => {
 
       <Box>
         <Box sx={{ display: 'flex', gap: 2, direction: 'ltr' }}>
-          <Input inputRef={ref1} value={code[0]} onKeyDown={(e) => onChange(e.key, 0, ref1.current, ref2.current, null)} type='number' />
+          <Input inputRef={ref1} value={code[0]} onKeyDown={(e) => onChange(e.key, 0, ref1.current, ref2.current, null)} type='number' inputMode='numeric' autoComplete='one-time-code' />
           <Input inputRef={ref2} value={code[1]} onKeyDown={(e) => onChange(e.key, 1, ref2.current, ref3.current, ref1.current)} type='number' />
           <Input inputRef={ref3} value={code[2]} onKeyDown={(e) => onChange(e.key, 2, ref3.current, ref4.current, ref2.current)} type='number' />
           <Input inputRef={ref4} value={code[3]} onKeyDown={(e) => onChange(e.key, 3, ref4.current, null, ref3.current)} type='number' />
