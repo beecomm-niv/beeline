@@ -25,10 +25,16 @@ export const OTP = (props: Props) => {
 
   const timeout = useRef<NodeJS.Timeout | undefined>(undefined);
 
-  const onChange = (val: string, index: number, currentRef: HTMLInputElement | null, nextRef: HTMLInputElement | null, prevRef: HTMLInputElement | null) => {
+  const onChange = (key: string, index: number, currentRef: HTMLInputElement | null, nextRef: HTMLInputElement | null, prevRef: HTMLInputElement | null) => {
+    const val = key === 'Backspace' ? '' : key;
+
+    if (val && isNaN(Number(val))) {
+      return;
+    }
+
     setCode((c) => {
       const clone = [...c];
-      clone[index] = val.at(-1) || '';
+      clone[index] = val;
       return clone;
     });
 
@@ -37,7 +43,7 @@ export const OTP = (props: Props) => {
       if (!nextRef) {
         currentRef?.blur();
       }
-    } else {
+    } else if (!code[index]) {
       prevRef?.focus();
     }
   };
@@ -84,10 +90,10 @@ export const OTP = (props: Props) => {
 
       <Box>
         <Box sx={{ display: 'flex', gap: 2, direction: 'ltr' }}>
-          <Input inputRef={ref1} value={code[0]} onChange={(e) => onChange(e.target.value, 0, ref1.current, ref2.current, null)} />
-          <Input inputRef={ref2} value={code[1]} onChange={(e) => onChange(e.target.value, 1, ref2.current, ref3.current, ref1.current)} />
-          <Input inputRef={ref3} value={code[2]} onChange={(e) => onChange(e.target.value, 2, ref3.current, ref4.current, ref2.current)} />
-          <Input inputRef={ref4} value={code[3]} onChange={(e) => onChange(e.target.value, 3, ref4.current, null, ref3.current)} />
+          <Input inputRef={ref1} value={code[0]} onKeyDown={(e) => onChange(e.key, 0, ref1.current, ref2.current, null)} type='number' />
+          <Input inputRef={ref2} value={code[1]} onKeyDown={(e) => onChange(e.key, 1, ref2.current, ref3.current, ref1.current)} type='number' />
+          <Input inputRef={ref3} value={code[2]} onKeyDown={(e) => onChange(e.key, 2, ref3.current, ref4.current, ref2.current)} type='number' />
+          <Input inputRef={ref4} value={code[3]} onKeyDown={(e) => onChange(e.key, 3, ref4.current, null, ref3.current)} type='number' />
         </Box>
 
         <Button variant='contained' fullWidth sx={{ borderRadius: '10px', marginTop: 4 }} onClick={onSubmit} disabled={props.isLoading}>

@@ -68,12 +68,12 @@ const ApplicationForm = (props: Props) => {
   };
 
   return (
-    <Box sx={{ padding: '0 5%' }}>
+    <Box sx={{ padding: '0 5%', paddingBottom: '20%' }}>
       <Box sx={{ width: '100%', textAlign: 'center', position: 'relative' }}>
         <Box sx={{ position: 'absolute', height: '100%', width: '100%', zIndex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Typography variant='h4'>{props.branch.name}</Typography>
         </Box>
-        <Image alt='' src={props.branch.image || ''} width={300} height={300} style={{ borderRadius: '0 0 10px 10px', filter: 'brightness(50%)' }} priority />
+        <Image alt='' src={props.branch.image || ''} width={300} height={300} style={{ borderRadius: '0 0 5% 5%', filter: 'brightness(40%)', width: '100%' }} priority />
       </Box>
 
       <Box sx={{ width: '100%', marginTop: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>

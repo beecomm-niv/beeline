@@ -14,6 +14,7 @@ import facebook from '../../../../public/facebook.png';
 import instagram from '../../../../public/instagram.png';
 import Image from 'next/image';
 import { HelperUtils } from '@/app/utils/helpers';
+import ConfirmationDialog from '../../confirmation-dialog';
 
 interface Props {
   reservation: CustomerReservation;
@@ -23,6 +24,7 @@ interface Props {
 
 const TrackStatus = (props: Props) => {
   const [waitingList, setWaitingsList] = useState<LightReservation[] | null>([]);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
 
   const { loading, request } = useHttpRequest();
   const place = useMemo(() => (waitingList || []).findIndex((w) => w.id === props.reservation.id) + 1, [props.reservation.id, waitingList]);
@@ -47,6 +49,7 @@ const TrackStatus = (props: Props) => {
   }, []);
 
   const cancelReservation = () => {
+    setConfirmDialogOpen(false);
     request({
       request: () =>
         HttpUtils.post(
@@ -66,35 +69,39 @@ const TrackStatus = (props: Props) => {
   }
 
   return (
-    <Box sx={{ display: 'flex', height: '100svh', width: '100%', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: 2, padding: '0 20px' }}>
-      <Typography variant='h4' sx={{ whiteSpace: 'nowrap' }}>
-        אתם ברשימת ההמתנה !
-      </Typography>
+    <>
+      <Box sx={{ display: 'flex', height: '100svh', width: '100%', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: 2, padding: '0 20px' }}>
+        <Typography variant='h4' sx={{ whiteSpace: 'nowrap' }}>
+          אתם ברשימת ההמתנה !
+        </Typography>
 
-      <Typography sx={{ marginTop: 2, marginBottom: -1 }} color='text.secondary'>
-        מיקומכם בתור הוא
-      </Typography>
-      <Card sx={{ width: '175px', height: '175px', borderRadius: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <CardContent>
-          {place > 0 ? (
-            <Typography color='primary' variant='h2'>
-              {place}
-            </Typography>
-          ) : (
-            <CircularProgress />
-          )}
-        </CardContent>
-      </Card>
+        <Typography sx={{ marginTop: 2, marginBottom: -1 }} color='text.secondary'>
+          מיקומכם בתור הוא
+        </Typography>
+        <Card sx={{ width: '175px', height: '175px', borderRadius: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <CardContent>
+            {place > 0 ? (
+              <Typography color='primary' variant='h2'>
+                {place}
+              </Typography>
+            ) : (
+              <CircularProgress />
+            )}
+          </CardContent>
+        </Card>
 
-      <Button variant='contained' color='error' fullWidth sx={{ marginTop: 4, borderRadius: '10px' }} onClick={cancelReservation} disabled={loading}>
-        ביטול הרשמה
-      </Button>
+        <Button variant='contained' color='error' fullWidth sx={{ marginTop: 4, borderRadius: '10px' }} onClick={() => setConfirmDialogOpen(true)} disabled={loading}>
+          ביטול הרשמה
+        </Button>
 
-      <Box sx={{ display: 'flex', gap: 4, marginTop: 5 }}>
-        {props.branch.facebook && <Image src={facebook} alt='' width={40} height={40} onClick={() => window.open(props.branch.facebook, '_blank')} />}
-        {props.branch.instagram && <Image src={instagram} alt='' width={40} height={40} onClick={() => window.open(props.branch.instagram, '_blank')} />}
+        <Box sx={{ display: 'flex', gap: 4, marginTop: 5 }}>
+          {props.branch.facebook && <Image src={facebook} alt='' width={40} height={40} onClick={() => window.open(props.branch.facebook, '_blank')} />}
+          {props.branch.instagram && <Image src={instagram} alt='' width={40} height={40} onClick={() => window.open(props.branch.instagram, '_blank')} />}
+        </Box>
       </Box>
-    </Box>
+
+      <ConfirmationDialog message='האם אתם בטוחים שברצונכם לבטל את ההזמנה ?' onCancel={() => setConfirmDialogOpen(false)} onConfirm={cancelReservation} open={confirmDialogOpen} title='ביטול הזמנה' />
+    </>
   );
 };
 

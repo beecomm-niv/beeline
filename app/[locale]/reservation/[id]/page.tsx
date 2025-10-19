@@ -1,4 +1,5 @@
 import Application from '@/app/components/application';
+import ApplicationExpired from '@/app/components/application/application-expired';
 import { BranchUtils } from '@/app/utils/branch';
 import { JwtUtils } from '@/app/utils/jwt';
 
@@ -14,7 +15,7 @@ export default async function ReservationPage(props: Props) {
 
   const payload = await JwtUtils.verifyToken<{ branchId: string }>(accessToken);
   if (!payload) {
-    return <div>Bad request</div>;
+    return <ApplicationExpired />;
   }
 
   const branch = await BranchUtils.getBranchById(payload.branchId);

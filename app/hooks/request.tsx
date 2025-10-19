@@ -9,7 +9,7 @@ import { useAppStore } from '../store/appStore-provider';
 const messages: Record<Locale, Record<number, string>> = {
   he: {
     1012: 'יש להזין מספר טלפון תקין',
-    1011: 'נתקלנו בשגיאה. יש לרענן את הדף ולנסות שוב',
+    1011: 'התוקף של האסימון פג. אנא התחבר מחדש כדי להמשיך.',
     1010: 'נכשל להעלות תמונה',
     1009: 'נכשל לשלוח SMS',
     1008: 'נכשל לשלוח SMS',
@@ -23,7 +23,7 @@ const messages: Record<Locale, Record<number, string>> = {
   },
   en: {
     1012: 'Please insert valid phone number',
-    1011: 'An error occurred. Please refresh the page and try again',
+    1011: 'Token has expired. Please scan the QR code again.',
     1010: 'Failed to upload image',
     1009: 'Failed to send SMS',
     1008: 'Failed to send SMS',
