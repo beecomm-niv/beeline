@@ -81,6 +81,25 @@ export const OTP = (props: Props) => {
     }
   };
 
+  useEffect(() => {
+    if ('OTPCredential' in window) {
+      const ac = new AbortController();
+      navigator.credentials
+        .get({
+          otp: { transport: ['sms'] },
+          signal: ac.signal,
+        } as any)
+        .then((otp: any) => {
+          window.alert(otp?.code);
+          ac.abort();
+        })
+        .catch((err) => {
+          ac.abort();
+          window.alert(err);
+        });
+    }
+  }, []);
+
   return (
     <Box sx={{ display: 'flex', height: '100svh', width: '100%', alignItems: 'center', flexDirection: 'column', padding: '20% 5% 0 5%', gap: 3 }}>
       <LockIcon color='primary' sx={{ fontSize: 70 }} />

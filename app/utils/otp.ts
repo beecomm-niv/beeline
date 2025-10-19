@@ -45,7 +45,7 @@ export class OtpUtils {
 
     data.count++;
 
-    await SmsUtils.sendMessage(branchId, phone, `קוד האימות החד פעמי שלך הוא: ${data.code}`);
+    await SmsUtils.sendMessage(branchId, phone, `${data.code} הוא הקוד החד פעמי שלך לאימות.\n\n@line.beecomm.com #${data.code}`);
 
     await this.collection.doc('/' + path).set(data);
   };
