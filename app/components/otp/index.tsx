@@ -56,7 +56,7 @@ export const OTP = (props: Props) => {
   useEffect(() => {
     setTimeout(() => {
       ref.current?.focus();
-    }, 100);
+    }, 500);
 
     onSetTimer();
 

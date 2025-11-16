@@ -54,8 +54,6 @@ const useHttpRequest = () => {
 
     const response = await params.request();
 
-    setLoading(false);
-
     if (response.hasError) {
       if (alertOnError) {
         snackbar.enqueueSnackbar(messages[lang][response.statusCode] || response.errorMessage, { variant: 'error' });
@@ -67,6 +65,8 @@ const useHttpRequest = () => {
     } else if (!response.hasError && params.onSuccess) {
       params.onSuccess(response.value);
     }
+
+    setLoading(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
