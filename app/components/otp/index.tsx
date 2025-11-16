@@ -25,14 +25,6 @@ export const OTP = (props: Props) => {
   const onChange = (code: string) => {
     if (!isNaN(+code) && code.length <= 4) {
       setCode(code);
-
-      if (code.length === 4) {
-        ref.current?.blur();
-        if (isFirstTry.current) {
-          onSubmit();
-          isFirstTry.current = false;
-        }
-      }
     }
   };
 
@@ -51,7 +43,21 @@ export const OTP = (props: Props) => {
   };
 
   useEffect(() => {
-    ref.current?.focus();
+    if (code.length === 4) {
+      ref.current?.blur();
+      if (isFirstTry.current) {
+        isFirstTry.current = false;
+        onSubmit();
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [code]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      ref.current?.focus();
+    }, 100);
+
     onSetTimer();
 
     return () => clearInterval(timeout.current);
