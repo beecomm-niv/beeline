@@ -17,6 +17,7 @@ interface Props {
 export const OTP = (props: Props) => {
   const [code, setCode] = useState<string>('');
   const [timer, setTimer] = useState(TIMEOUT_LENGTH);
+  const [isFocuesd, setIsFocused] = useState(false);
 
   const timeout = useRef<NodeJS.Timeout | undefined>(undefined);
   const ref = useRef<HTMLInputElement | null>(null);
@@ -54,10 +55,6 @@ export const OTP = (props: Props) => {
   }, [code]);
 
   useEffect(() => {
-    setTimeout(() => {
-      ref.current?.focus();
-    }, 500);
-
     onSetTimer();
 
     return () => clearInterval(timeout.current);
@@ -86,7 +83,11 @@ export const OTP = (props: Props) => {
       <Box>
         <Box sx={{ display: 'flex', gap: 2, direction: 'ltr' }} onClick={() => ref.current?.focus()}>
           {[1, 2, 3, 4].map((c) => (
-            <Card key={c} sx={{ padding: 4, height: 30, width: 40, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '10%' }}>
+            <Card
+              key={c}
+              variant={isFocuesd && (code.length + 1 === c || (code.length === 4 && c === 4)) ? 'outlined' : undefined}
+              sx={{ padding: 4, height: 30, width: 40, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '10%' }}
+            >
               <Typography fontSize={25}>{code.at(c - 1) || ''}</Typography>
             </Card>
           ))}
@@ -99,6 +100,8 @@ export const OTP = (props: Props) => {
           inputMode='numeric'
           autoComplete='one-time-code'
           onChange={(e) => onChange(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
         />
 
         <Button variant='contained' fullWidth sx={{ borderRadius: '10px', marginTop: 4 }} onClick={onSubmit} disabled={props.isLoading}>
