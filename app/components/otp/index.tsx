@@ -20,6 +20,7 @@ export const OTP = (props: Props) => {
 
   const timeout = useRef<NodeJS.Timeout | undefined>(undefined);
   const ref = useRef<HTMLInputElement | null>(null);
+  const isFirstTry = useRef(true);
 
   const onChange = (code: string) => {
     if (!isNaN(+code) && code.length <= 4) {
@@ -27,6 +28,10 @@ export const OTP = (props: Props) => {
 
       if (code.length === 4) {
         ref.current?.blur();
+        if (isFirstTry.current) {
+          onSubmit();
+          isFirstTry.current = false;
+        }
       }
     }
   };
@@ -46,6 +51,7 @@ export const OTP = (props: Props) => {
   };
 
   useEffect(() => {
+    ref.current?.focus();
     onSetTimer();
 
     return () => clearInterval(timeout.current);
