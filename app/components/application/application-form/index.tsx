@@ -83,11 +83,13 @@ const ApplicationForm = (props: Props) => {
         <TextField label='טלפון' value={phone} onChange={(e) => setPhone(e.target.value)} />
         <Divider>כמה סועדים ?</Divider>
         <Select fullWidth value={selectedDinners} onChange={(e) => setSelectedDinners(e.target.value)}>
-          {dinners.current.map((d) => (
-            <MenuItem key={d} value={d}>
-              {d}
-            </MenuItem>
-          ))}
+          {dinners.current
+            .sort((a, b) => a - b)
+            .map((d) => (
+              <MenuItem key={d} value={d}>
+                {d}
+              </MenuItem>
+            ))}
         </Select>
 
         <Button variant='contained' sx={{ borderRadius: '10px', marginTop: 2 }} onClick={onSubmit} disabled={props.isLoading}>
